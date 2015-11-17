@@ -32,7 +32,10 @@ Service Level Agreement APP
         ]
 
 ## Models
-
+* Company
+    - Company name
+    - Employee/Providers [ ]
+    
 * Provider
   - ID
   - Picture
