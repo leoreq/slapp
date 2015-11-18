@@ -24,7 +24,7 @@ class Provider(models.Model):
 		ordering = ('company','name',)
 
 class Services(models.Model):
-	company = models.ForeignKey(Company)
+	company = models.ForeignKey(Company)## Migrate to deletion...unnecesary field 
 	provider= models.ForeignKey(Provider)
 	client=models.CharField(max_length=30,unique=True)
 	agreement_list=HStoreField()

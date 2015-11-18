@@ -1,0 +1,36 @@
+
+html {
+    position: relative;
+    min-height: 100%;
+    }
+
+body {
+    padding-top: 10em; /* 60px to make the container go all the way to the bottom of the topbar */
+    background-color: #58657F;
+    /* Margin bottom by footer height */
+    margin-bottom: 5em;
+    /*font-size:1.5em;*/
+    }
+
+.navbar {
+    background-color:#B1CAFF;
+    border-radius: 1.5em 1.5em 0 0;
+    }
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 5em;
+    background-color: #B1CAFF;
+    border-radius: 0 0 1.5em 1.5em;
+    }
+.action-button-section {
+padding:5em;
+}
+
+.btn{
+    padding: 1em;
+    margin: 1em 0;
+}
