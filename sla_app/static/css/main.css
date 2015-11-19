@@ -6,31 +6,48 @@ html {
 
 body {
     padding-top: 10em; /* 60px to make the container go all the way to the bottom of the topbar */
-    background-color: #58657F;
+    /*background-color: #58657F;*/
     /* Margin bottom by footer height */
     margin-bottom: 5em;
     /*font-size:1.5em;*/
+    font-family: 'Crimson Text', serif!important;
     }
 
+h2 ,h4{
+    font-family: 'Julius Sans One', sans-serif!important;
+    color:#B1CAFF!important;
+}
 .navbar {
-    background-color:#B1CAFF;
-    border-radius: 1.5em 1.5em 0 0;
+    background-color:#324B7F;
+    /*border-radius: 1.5em 1.5em 0 0;*/
     }
+
 
 .footer {
     position: absolute;
     bottom: 0;
     width: 100%;
     /* Set the fixed height of the footer here */
-    height: 5em;
-    background-color: #B1CAFF;
-    border-radius: 0 0 1.5em 1.5em;
+    height: 7em;
+    background-color: #324B7F;
+    color:#B1CAFF!important;
+    /*border-radius: 0 0 1.5em 1.5em;*/
     }
-.action-button-section {
-padding:5em;
+
+.social li a {
+    color:#B1CAFF;
+}
+.action-button-section strong {
+color:white;
 }
 
-.btn{
+.boton{
+    white-space: normal; 
     padding: 1em;
     margin: 1em 0;
+    background-color: #6496FF;
+}
+.boton:hover{
+    background-color: #324B7F;
+    color:#B1CAFF!important;
 }
