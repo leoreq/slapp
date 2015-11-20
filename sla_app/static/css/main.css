@@ -13,7 +13,7 @@ body {
     font-family: 'Crimson Text', serif!important;
     }
 
-h2 ,h4{
+h2 ,h4, small{
     font-family: 'Julius Sans One', sans-serif!important;
     color:#B1CAFF!important;
 }
@@ -22,7 +22,9 @@ h2 ,h4{
     /*border-radius: 1.5em 1.5em 0 0;*/
     }
 
-
+a {text-decoration:none;
+}
+#providers_login {color: black!important;}
 .footer {
     position: absolute;
     bottom: 0;

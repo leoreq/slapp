@@ -20,6 +20,6 @@ from django.contrib.auth import views
 urlpatterns = [
 	url(r'^slapp/', include('sla_app.urls')),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^accounts/login/$', auth.views.login, {'template_name': 'sla_app/login.html'},name='loginslap'),
+    url(r'^login/$', auth.views.login, {'template_name': 'sla_app/login.html'},name='loginslap'),
    	url('', include('django.contrib.auth.urls')),
 ]
