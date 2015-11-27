@@ -25,7 +25,8 @@ class NewCompanyTest(unittest.TestCase):
 
         #Juanito that works in the company decided to explore the webpage: /SLAPP
         self.browser.get('http://localhost:8000/slapp')
-        self.browser.implicitely_wait(3)
+        ##self.browser.implicitely_wait(3)
+        ##self.WebDriverWait(driver, 10)
 
         #Juanito is on the go so just is navigating the web page through his cell phone, and realizez that there is a nice welcoming page.
         self.assertIn('SLAPP',self.browser.title) 
