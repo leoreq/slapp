@@ -25,10 +25,28 @@ class NewCompanyTest(unittest.TestCase):
 
         #Juanito that works in the company decided to explore the webpage: /SLAPP
         self.browser.get('http://localhost:8000/slapp')
+        self.browser.implicitely_wait(3)
 
         #Juanito is on the go so just is navigating the web page through his cell phone, and realizez that there is a nice welcoming page.
         self.assertIn('SLAPP',self.browser.title) 
+        self.fail('Finish the test')
+
+        #Juanito explores the page and enters the Company section
+
+        #While he clicks the page he gets prompted for a login. 
+
+        #As Juanito is new he will select to Sign up for a new account. 
+
+        #Juanito enters the sign up page.
+
+        #There he enters his login name.
+
+        #Juanito mistakedly entered mismatching paswwords. 
+
+        #Juanito then focuses and puts in matching passwords.
+
+        #Juanito gets prompted to a new page that asks for more info
 
 if __name__=='__main__':
-    unittest.main()
+    unittest.main(warnings='ignore')
 
