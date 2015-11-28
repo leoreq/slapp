@@ -3,8 +3,11 @@ from django.http import HttpResponse
 
 from django.template import RequestContext, loader
 
+# Create your views here.
 
 
+def pag_inicio():
+    pass
 
 def home(request):
     template = loader.get_template('sla_app/home.html')
