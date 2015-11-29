@@ -6,8 +6,8 @@ from django.template import RequestContext, loader
 # Create your views here.
 
 
-def pag_inicio():
-    pass
+def pag_inicio(request):
+    return HttpResponse('<html><title>Pagina Inicio</title></html>')
 
 def home(request):
     template = loader.get_template('sla_app/home.html')
