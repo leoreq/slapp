@@ -29,8 +29,17 @@ class NewCompanyTest(unittest.TestCase):
         ##self.WebDriverWait(driver, 10)
 
         #Juanito is on the go so just is navigating the web page through his cell phone, and realizez that there is a nice welcoming page.
+        
+        #Juanito notices different elements on the page:
+        # - SLAPP TITLE
         self.assertIn('SLAPP',self.browser.title) 
-        self.fail('Finish the test')
+        header_text=self.browser.find_element_by_tag_name('h2').text
+        self.assertIn('SLAPP',header_text)
+
+        # - Three Buttons
+        company_button_text=self.browser.find_element_by_id('companies_button').text
+        self.assertIn('Companies',company_button_text)
+        # - Footer
 
         #Juanito explores the page and enters the Company section
 
@@ -47,6 +56,7 @@ class NewCompanyTest(unittest.TestCase):
         #Juanito then focuses and puts in matching passwords.
 
         #Juanito gets prompted to a new page that asks for more info
+        self.fail('Finish the test')
 
 if __name__=='__main__':
     unittest.main(warnings='ignore')

@@ -11,9 +11,9 @@ from django.http import HttpRequest
 #    def test_bad_maths():
 #        self.assertEqual(1+1,3)
 
-class HomePageTest(TestCase):
+class InicioPageTest(TestCase):
 
-    def test_root_urlresolve_to_homepage_view(self):
+    def test_root_urlresolve_to_inicio_view(self):
         found=resolve('/')
         self.assertEqual(found.func,pag_inicio)
 
@@ -22,4 +22,17 @@ class HomePageTest(TestCase):
         response=pag_inicio(request)
         self.assertIn(b'<title>Pagina Inicio</title>',response.content)
         self.assertTrue(response.content.startswith(b'<html>'))
+
+class HomePageTest(TestCase):
+
+    def test_root_urlresolve_to_homepage_view(self):
+        found=resolve('/slapp/')
+        self.assertEqual(found.func,home)
+
+    def test_page_returns_correct_html(self):
+        request=HttpRequest()
+        response=home(request)
+        self.assertContains(response,'<title>SLAPP - Service Level Agreement APP</title>',status_code=200 ,html=True)
+        #self.assertTrue(response.content.startswith(b'<html lang="en"><head>'))
+        
 
