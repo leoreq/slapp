@@ -2,14 +2,6 @@
 
 {% block content %}
 
-{% if form.errors %}
-<div class="container">
-    <div class="row">
-        <p>DEBUG: Missing a propper error message.</p>
-    </div>
-</div>
-
-{% endif %}
 
 {% if next %}
     {% if user.is_authenticated %}
@@ -23,7 +15,7 @@
     <div class="container">
         <div class="row">
             <p>Please login to see this page.</p>
-        </div>
+        </#div>
     </div>
     
     {% endif %}
