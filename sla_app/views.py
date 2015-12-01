@@ -19,6 +19,8 @@ from django.contrib.auth import (
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.response import TemplateResponse
+from django.utils.http import is_safe_url, urlsafe_base64_decode
+from django.shortcuts import resolve_url
 
 # Create your views here.
 
@@ -55,19 +57,18 @@ def profile_update(request, template_name='sla_app/profile_update.html',
                                    request.GET.get(redirect_field_name, ''))
 
     if request.method == "POST":
-        form = company_form(request, data=request.POST)
+        form = company_form(data=request.POST)
         if form.is_valid():
 
             # Ensure the user-originating redirection url is safe.
             if not is_safe_url(url=redirect_to, host=request.get_host()):
                 redirect_to = resolve_url(settings.LOGIN_REDIRECT_URL)
 
-            # Create a form instance from POST data.
-            f = company_form(request.POST)
-
             # Save a new Article object from the form's data.
-            update_profile = f.save()
-
+            
+            update_profile = form.save(commit=False)
+            update_profile.user = request.user
+            update_profile.save()
             return HttpResponseRedirect(redirect_to)
     else:
         form = company_form(request)
