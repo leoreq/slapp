@@ -16,6 +16,13 @@ def home(request):
     })
     return HttpResponse(template.render(context))
 
+def profile_update(request):
+    template = loader.get_template('sla_app/profile_update.html')
+    context = RequestContext(request, {
+        'test': 'test',
+    })
+    return HttpResponse(template.render(context))
+
 # Create your views here.
 
 
