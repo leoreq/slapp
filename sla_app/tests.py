@@ -3,6 +3,7 @@ from django.test import TestCase
 from django.core.urlresolvers import resolve
 from sla_app.views import home,pag_inicio
 from django.http import HttpRequest
+from django.template.loader import render_to_string
 
 # Create your tests here.
 
@@ -20,8 +21,8 @@ class InicioPageTest(TestCase):
     def test_page_returns_correct_html(self):
         request=HttpRequest()
         response=pag_inicio(request)
-        self.assertIn(b'<title>Pagina Inicio</title>',response.content)
-        self.assertTrue(response.content.startswith(b'<html>'))
+        expected_html=render_to_string('sla_app/pagina_inicio.html')
+        self.assertEqual(response.content.decode(),expected_html)
 
 class HomePageTest(TestCase):
 

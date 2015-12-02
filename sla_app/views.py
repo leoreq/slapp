@@ -26,7 +26,7 @@ from django.shortcuts import resolve_url
 
 
 def pag_inicio(request):
-    return HttpResponse('<html><title>Pagina Inicio</title></html>')
+    return render(request,'sla_app/pagina_inicio.html')
 
 def home(request):
     template = loader.get_template('sla_app/home.html')
