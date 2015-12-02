@@ -3,6 +3,7 @@ import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.keys import Keys
 
 ##test if chrome webdriver is there
 #driver = webdriver.Chrome('/Users/LeeX/Dropbox/Programming/Thinkfull/python/django/slapp/sla_app/chromedriver')  # Optional argument, if not specified will search path.
@@ -78,7 +79,7 @@ class NewCompanyTest(unittest.TestCase):
         login_form=self.browser.find_element_by_id('loginform')
 
         #There he enters his login name.
-        inputbox = self.browser.find_element_by_id('login-user')
+        inputbox = self.browser.find_element_by_id('login-username')
         self.assertEqual(
                 inputbox.get_attribute('placeholder'),
                 'username or email'
@@ -88,14 +89,14 @@ class NewCompanyTest(unittest.TestCase):
         #Juanito mistakedly entered mismatching paswwords. 
         pass1inputbox = self.browser.find_element_by_id('login-password')
         self.assertEqual(
-                inputbox.get_attribute('placeholder'),
+                pass1inputbox.get_attribute('placeholder'),
                 'password'
         )
         pass1inputbox.send_keys('testpasss')
         pass1inputbox.send_keys(Keys.ENTER)
         pass2inputbox = self.browser.find_element_by_id('login-password2')
         self.assertEqual(
-                inputbox.get_attribute('placeholder'),
+                pass2inputbox.get_attribute('placeholder'),
                 'confirm password'
         )
         pass2inputbox.send_keys('mismatchingtestpasss')
