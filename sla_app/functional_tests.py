@@ -39,6 +39,19 @@ class NewCompanyTest(unittest.TestCase):
         # - Three Buttons
         company_button_text=self.browser.find_element_by_id('companies_button').text
         self.assertIn('Companies',company_button_text)
+
+        table = self.browser.find_elements_by_tag_name('button')
+        self.assertTrue(
+            any('EXPLORE'in row.text for row in table )
+        )
+        self.assertTrue( 
+            any('MANAGE'in row.text for row in table )
+        )
+        self.assertTrue(
+            any('EVALUATE'in row.text for row in table )
+        )
+
+
         # - Footer
 
         #Juanito explores the page and enters the Company section
