@@ -44,13 +44,14 @@ class NewCompanyTest(unittest.TestCase):
 
         table = self.browser.find_elements_by_tag_name('button')
         self.assertTrue(
-            any('EXPLORE'in row.text for row in table )
+            any('EXPLORE'in row.text for row in table ),
         )
         self.assertTrue( 
-            any('MANAGE'in row.text for row in table )
+            any('MANAGE'in row.text for row in table ),
+            "Company button is not appearing"
         )
         self.assertTrue(
-            any('EVALUATE'in row.text for row in table )
+            any('EVALUATE'in row.text for row in table ),
         )
 
 
@@ -75,15 +76,30 @@ class NewCompanyTest(unittest.TestCase):
         
         self.browser.find_element(By.PARTIAL_LINK_TEXT,"Sign Up Here").click();
         login_form=self.browser.find_element_by_id('loginform')
-        inputbox = self.browser.find_element_by_id('login-password2')
+
+        #There he enters his login name.
+        inputbox = self.browser.find_element_by_id('login-user')
+        self.assertEqual(
+                inputbox.get_attribute('placeholder'),
+                'username or email'
+        )
+        inputbox.send_keys('testuser')
+        inputbox.send_keys(Keys.ENTER)
+        #Juanito mistakedly entered mismatching paswwords. 
+        pass1inputbox = self.browser.find_element_by_id('login-password')
+        self.assertEqual(
+                inputbox.get_attribute('placeholder'),
+                'password'
+        )
+        pass1inputbox.send_keys('testpasss')
+        pass1inputbox.send_keys(Keys.ENTER)
+        pass2inputbox = self.browser.find_element_by_id('login-password2')
         self.assertEqual(
                 inputbox.get_attribute('placeholder'),
                 'confirm password'
         )
-        #There he enters his login name.
-
-        #Juanito mistakedly entered mismatching paswwords. 
-
+        pass2inputbox.send_keys('mismatchingtestpasss')
+        pass2inputbox.send_keys(Keys.ENTER)
         #Juanito then focuses and puts in matching passwords.
 
         #Juanito gets prompted to a new page that asks for more info
