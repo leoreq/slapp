@@ -1,6 +1,8 @@
 import unittest
 import time
 from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
 
 ##test if chrome webdriver is there
 #driver = webdriver.Chrome('/Users/LeeX/Dropbox/Programming/Thinkfull/python/django/slapp/sla_app/chromedriver')  # Optional argument, if not specified will search path.
@@ -55,13 +57,29 @@ class NewCompanyTest(unittest.TestCase):
         # - Footer
 
         #Juanito explores the page and enters the Company section
+        self.browser.find_element(By.ID, "companies_button").click()
+        WebDriverWait(self.browser, 10)
 
+        login_form=self.browser.find_element_by_tag_name('form')
+
+        inputs = self.browser.find_elements(By.XPATH, "//input")
         #While he clicks the page he gets prompted for a login. 
-
+        inputbox = self.browser.find_element_by_id('login-username')
+        self.assertEqual(
+                inputbox.get_attribute('placeholder'),
+                'username or email'
+        )
         #As Juanito is new he will select to Sign up for a new account. 
 
         #Juanito enters the sign up page.
-
+        
+        self.browser.find_element(By.PARTIAL_LINK_TEXT,"Sign Up Here").click();
+        login_form=self.browser.find_element_by_id('loginform')
+        inputbox = self.browser.find_element_by_id('login-password2')
+        self.assertEqual(
+                inputbox.get_attribute('placeholder'),
+                'confirm password'
+        )
         #There he enters his login name.
 
         #Juanito mistakedly entered mismatching paswwords. 
