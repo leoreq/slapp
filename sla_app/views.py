@@ -26,6 +26,8 @@ from django.shortcuts import resolve_url
 
 
 def pag_inicio(request):
+    if request.method == 'POST':
+        return HttpResponse(request.POST['item_text'])
     return render(request,'sla_app/pagina_inicio.html')
 
 def home(request):

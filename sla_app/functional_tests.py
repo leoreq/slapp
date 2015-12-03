@@ -86,6 +86,10 @@ class NewCompanyTest(unittest.TestCase):
         )
         inputbox.send_keys('testuser')
         inputbox.send_keys(Keys.ENTER)
+        
+        #import time
+        #time.sleep(10)
+
         #Juanito mistakedly entered mismatching paswwords. 
         pass1inputbox = self.browser.find_element_by_id('login-password')
         self.assertEqual(
