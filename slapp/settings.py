@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.postgres',
     'sla_app',
+    'tdd',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -60,6 +61,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'templates'),
         '/sla_app/templates',
+        '/tdd/templates',
         ],
         'APP_DIRS': True,
         'OPTIONS': {

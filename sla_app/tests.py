@@ -4,6 +4,7 @@ from django.core.urlresolvers import resolve
 from sla_app.views import home,pag_inicio,profile_update
 from django.http import HttpRequest
 from django.template.loader import render_to_string
+from sla_app.models import Company
 
 # Create your tests here.
 
@@ -11,36 +12,6 @@ from django.template.loader import render_to_string
 #
 #    def test_bad_maths():
 #        self.assertEqual(1+1,3)
-
-class InicioPageTest(TestCase):
-
-    def test_root_urlresolve_to_inicio_view(self):
-        found=resolve('/pag_inicio/')
-
-        self.assertEqual(found.func,pag_inicio)
-
-    def test_page_returns_correct_html(self):
-        request=HttpRequest()
-        response=pag_inicio(request)
-
-        expected_html=render_to_string('sla_app/pagina_inicio.html')
-
-        self.assertEqual(response.content.decode(),expected_html)
-
-    def test_pagina_inicio_can_save_a_POST_request(self):
-        request = HttpRequest()
-        request.method = 'POST'
-        request.POST['item_text'] = 'A new list item'
-
-        response = pag_inicio(request)
-
-        self.assertIn('A new list item', response.content.decode())
-
-        expected_html=render_to_string('sla_app/pagina_inicio.html',{
-        'new_item_text':'A new list item'
-        })
-
-        self.assertEqual(response.content.decode(),expected_html)
 
 class HomePageTest(TestCase):
 
@@ -63,6 +34,31 @@ class CompanyProfileUpdateTest(TestCase):
         found=resolve('/slapp/profile_update/')
 
         self.assertEqual(found.func,profile_update)
+
+class CompanyModelTest(TestCase):
+
+    def test_saving_and_retrieving_items(self):
+        first_company = Company()
+        first_company.user=1
+        first_company.name = 'New Testing Corp'
+        first_company.service='This is a company that tests things'
+        first_company.save()
+
+        second_company = Company()
+        second_company.user=2
+        second_company.name = 'Old Testing Corp'
+        second_company.service='This is a company that should tests things'
+        second_company.save()
+
+        saved_items = Item.objects.all()
+        self.assertEqual(saved_items.count(), 2)
+
+        first_saved_item = saved_items[0]
+        second_saved_item = saved_items[1]
+        self.assertEqual(first_saved_item.name, 'New Testing Corp')
+        self.assertEqual(second_saved_item.service, 'This is a company that should tests things')
+
+
 
     # for later --> def test_profile_update_can_save_a_POST_request(self):
     # for later -->     request=HttpRequest()

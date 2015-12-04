@@ -5,6 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 
+
 ##test if chrome webdriver is there
 #driver = webdriver.Chrome('/Users/LeeX/Dropbox/Programming/Thinkfull/python/django/slapp/sla_app/chromedriver')  # Optional argument, if not specified will search path.
 #driver.get('http://www.google.com/xhtml');
@@ -115,7 +116,12 @@ class NewCompanyTest(unittest.TestCase):
         rows = table.find_elements_by_tag_name('tr')
         self.assertIn(item_name,[row.text for row in rows])
 
+class ItemListTest(unittest.TestCase):
+    def setUp(self):
+        self.browser=webdriver.Chrome('/Users/LeeX/Dropbox/Programming/Thinkfull/python/django/slapp/sla_app/chromedriver')  # Optional argument, if not specified will search path.
 
+    def tearDown(self):
+        self.browser.quit()
     def test_can_start_a_list_and_retrieve_it_later(self):
         # Edith has heard about a cool new online to-do app. She goes
         # to check out its homepage

@@ -26,7 +26,7 @@ from django.core.urlresolvers import reverse_lazy
 
 
 urlpatterns = [
-    url(r'^pag_inicio/$',views.pag_inicio,name='inicio'),
+    url(r'^tdd/',include('tdd.urls')),
 	url(r'^slapp/', include('sla_app.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^login/$', auth.views.login, {'template_name': 'sla_app/login.html'},name='loginslap'),
