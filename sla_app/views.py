@@ -26,9 +26,7 @@ from django.shortcuts import resolve_url
 
 
 def pag_inicio(request):
-    if request.method == 'POST':
-        return HttpResponse(request.POST['item_text'])
-    return render(request,'sla_app/pagina_inicio.html')
+    return render(request,'sla_app/pagina_inicio.html',{'new_item_text':request.POST.get('item_text','')})
 
 def home(request):
     template = loader.get_template('sla_app/home.html')
@@ -45,9 +43,7 @@ def home(request):
 #    return HttpResponse(template.render(context))
 
 # Create your views here.
-@sensitive_post_parameters()
-@csrf_protect
-@never_cache
+
 def profile_update(request, template_name='sla_app/profile_update.html',
           redirect_field_name=REDIRECT_FIELD_NAME,
           company_form=CompanyForm,
