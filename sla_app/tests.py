@@ -40,18 +40,21 @@ class CompanyProfileUpdateTest(TestCase):
         request = HttpRequest()
         request.method = 'POST'
         request.POST['name'] = 'New Testing Corp'
-        request.POST['service'] = 'New Testing Corp'
+        request.POST['service'] = 'New Testing Services'
 
         response = profile_update(request)
 
         self.assertEqual(Company.objects.count(),1)
         new_company=Company.objects.first()
         self.assertEqual(new_company.name,'New Testing Corp')
+        self.assertEqual(new_company.service,'New Testing Services')
 
         self.assertIn('New Testing Corp', response.content.decode())
+        self.assertIn('New Testing Services', response.content.decode())
 
         expected_html=render_to_string('sla_app/profile_update.html',{
-        'new_company_name':new_company.name
+        'new_company_name':new_company.name,
+        'new_service_name':new_company.service,
         })
 
         self.assertEqual(response.content.decode(),expected_html)
