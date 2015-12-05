@@ -1,4 +1,4 @@
-import unittest
+
 import time
 from django.test import TestCase
 from selenium import webdriver
@@ -8,7 +8,7 @@ from selenium.webdriver.common.keys import Keys
 #from django.contrib.auth.models import User
 #from .models import Company
 
-class NewCompanyTest(unittest.TestCase):
+class NewCompanyTest(TestCase):
     def setUp(self):
         self.browser=webdriver.Chrome('/Users/LeeX/Dropbox/Programming/Thinkfull/python/django/slapp/sla_app/chromedriver')  # Optional argument, if not specified will search path.
         # Before performing any tests, record the existing
@@ -151,14 +151,4 @@ class NewCompanyTest(unittest.TestCase):
 
         #
         self.fail('Finish the test')
-
-    def check_item_in_row(self,item_name):
-        table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-        self.assertIn(item_name,[row.text for row in rows])
-
-
-
-if __name__=='__main__':
-    unittest.main(warnings='ignore')
 

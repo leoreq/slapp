@@ -1,29 +1,24 @@
 import unittest
 import time
+from django.test import TestCase
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 
 
-##test if chrome webdriver is there
-#driver = webdriver.Chrome('/Users/LeeX/Dropbox/Programming/Thinkfull/python/django/slapp/sla_app/chromedriver')  # Optional argument, if not specified will search path.
-#driver.get('http://www.google.com/xhtml');
-#time.sleep(5) # Let the user actually see something!
-#search_box = driver.find_element_by_name('q')
-#search_box.send_keys('ChromeDriver')
-#search_box.submit()
-#time.sleep(5) # Let the user actually see something!
-#driver.quit()
 
 
 class ItemListTest(unittest.TestCase):
 
+
     def setUp(self):
         self.browser=webdriver.Chrome('/Users/LeeX/Dropbox/Programming/Thinkfull/python/django/slapp/sla_app/chromedriver')  # Optional argument, if not specified will search path.
 
+
     def tearDown(self):
         self.browser.quit()
+
 
     def check_item_in_row(self,item_name):
         table = self.browser.find_element_by_id('id_list_table')
