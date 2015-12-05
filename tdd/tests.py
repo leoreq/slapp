@@ -33,9 +33,7 @@ class InicioPageTest(TestCase):
 
         self.assertEqual(Item.objects.count(),1)
         new_item=Item.objects.first()
-        self.assertEqual(new_item,'A new list item')
-
-
+        self.assertEqual(new_item.text,'A new list item')
 
         self.assertIn('A new list item', response.content.decode())
 
@@ -44,6 +42,11 @@ class InicioPageTest(TestCase):
         })
 
         self.assertEqual(response.content.decode(),expected_html)
+
+    def test_pagina_inicio_saves_only_when_needed(self):
+        request=HttpRequest()
+        response=pag_inicio(request)
+        self.assertEqual(Item.objects.count(),0)
 
 class ItemModelTest(TestCase):
 

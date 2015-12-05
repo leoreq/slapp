@@ -36,11 +36,30 @@ class CompanyProfileUpdateTest(TestCase):
 
         self.assertEqual(found.func,profile_update)
 
+    def test_profile_update_can_save_a_POST_request(self):
+        request = HttpRequest()
+        request.method = 'POST'
+        request.POST['name'] = 'New Testing Corp'
+        request.POST['service'] = 'New Testing Corp'
+
+        response = profile_update(request)
+
+        self.assertEqual(Company.objects.count(),1)
+        new_company=Company.objects.first()
+        self.assertEqual(new_company.name,'New Testing Corp')
+
+        self.assertIn('New Testing Corp', response.content.decode())
+
+        expected_html=render_to_string('sla_app/profile_update.html',{
+        'new_company_name':new_company.name
+        })
+
+        self.assertEqual(response.content.decode(),expected_html)
+
 class CompanyModelTest(TestCase):
 
     def test_saving_and_retrieving_items(self):
         first_user=User.objects.create_user('testuser1','test@gmail.com',password='testpass')
-        first_user.save()
 
         first_company = Company()
         first_company.user=first_user
@@ -49,7 +68,6 @@ class CompanyModelTest(TestCase):
         first_company.save()
 
         second_user=User.objects.create_user('testuser2','test2@gmail.com',password='testpass2')
-        second_user.save()
 
         second_company = Company()
         second_company.user=second_user

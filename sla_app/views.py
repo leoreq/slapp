@@ -3,6 +3,8 @@ from django.http import HttpResponse
 
 from django.template import RequestContext, loader
 from sla_app.forms import CompanyForm
+from sla_app.models import Company
+from django.contrib.auth.models import User
 
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
@@ -44,48 +46,61 @@ def home(request):
 
 # Create your views here.
 
-def profile_update(request, template_name='sla_app/profile_update.html',
-          redirect_field_name=REDIRECT_FIELD_NAME,
-          company_form=CompanyForm,
-          current_app=None, extra_context=None):
-    """
-    Displays the profile update form and handles the update action.
-    """
-    redirect_to = request.POST.get(redirect_field_name,
-                                   request.GET.get(redirect_field_name, ''))
-
-    if request.method == "POST":
-        form = company_form(data=request.POST)
-        if form.is_valid():
-
-            # Ensure the user-originating redirection url is safe.
-            if not is_safe_url(url=redirect_to, host=request.get_host()):
-                redirect_to = resolve_url(settings.LOGIN_REDIRECT_URL)
-
-            # Save a new Article object from the form's data.
-            
-            update_profile = form.save(commit=False)
-            update_profile.user = request.user
-            update_profile.save()
-            return HttpResponseRedirect(redirect_to)
+def profile_update(request):
+    if request.method=='POST':
+        new_company_name=request.POST.get('name','Enter Company Name')
+        first_user=User.objects.create_user('testuser1','test@gmail.com',password='testpass')
+        Company.objects.create(user=first_user,name=new_company_name,service='test service')
     else:
-        form = company_form(request)
+        new_company_name='Enter Company Name'
 
-    current_site = get_current_site(request)
+    return render(request,'sla_app/profile_update.html',
+        {'new_company_name':new_company_name,
+        })
 
-    context = {
-        'form': form,
-        redirect_field_name: redirect_to,
-        'site': current_site,
-        'site_name': current_site.name,
-    }
-    if extra_context is not None:
-        context.update(extra_context)
 
-    if current_app is not None:
-        request.current_app = current_app
-
-    return TemplateResponse(request, template_name, context)
+#def profile_update(request, template_name='sla_app/profile_update.html',
+#          redirect_field_name=REDIRECT_FIELD_NAME,
+#          company_form=CompanyForm,
+#          current_app=None, extra_context=None):
+#    """
+#    Displays the profile update form and handles the update action.
+#    """
+#    redirect_to = request.POST.get(redirect_field_name,
+#                                   request.GET.get(redirect_field_name, ''))
+#
+#    if request.method == "POST":
+#        form = company_form(data=request.POST)
+#        if form.is_valid():
+#
+#            # Ensure the user-originating redirection url is safe.
+#            if not is_safe_url(url=redirect_to, host=request.get_host()):
+#                redirect_to = resolve_url(settings.LOGIN_REDIRECT_URL)
+#
+#            # Save a new Article object from the form's data.
+#            
+#            update_profile = form.save(commit=False)
+#            update_profile.user = request.user
+#            update_profile.save()
+#            return HttpResponseRedirect(redirect_to)
+#    else:
+#        form = company_form(request)
+#
+#    current_site = get_current_site(request)
+#
+#    context = {
+#        'form': form,
+#        redirect_field_name: redirect_to,
+#        'site': current_site,
+#        'site_name': current_site.name,
+#    }
+#    if extra_context is not None:
+#        context.update(extra_context)
+#
+#    if current_app is not None:
+#        request.current_app = current_app
+#
+#    return TemplateResponse(request, template_name, context)
 
 #def index(request):
 #    return HttpResponse("This will hold the SLAPP Landing Page")
