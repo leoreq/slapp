@@ -1,22 +1,12 @@
-import os
-from os.path import abspath, dirname
-import sys
-import django
 
-# Set up django
-project_dir = abspath(dirname(dirname(__file__)))
-sys.path.insert(0, project_dir)
-os.environ['DJANGO_SETTINGS_MODULE'] = 'slapp.settings'
-django.setup()
 from django.db import connection
 from django.test.utils import setup_test_environment, teardown_test_environment
 
 from slapp import settings
 from sla_app.models import Company
 
-import unittest
-import time
-from django.test import TestCase
+from django.test import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -24,54 +14,12 @@ from selenium.webdriver.common.keys import Keys
 from django.contrib.auth.models import User
 
 
-class NewCompanyTest(unittest.TestCase):
+class NewCompanyTest(StaticLiveServerTestCase):
     def setUp(self):
         self.browser=webdriver.Chrome('/Users/LeeX/Dropbox/Programming/Thinkfull/python/django/slapp/sla_app/chromedriver')  # Optional argument, if not specified will search path.
-        # Before performing any tests, record the existing
-        # user IDs:
-        # 1. So we know which users we created during the test
-        # 2. So we can remove just those fake users.
-        print ('setUp()')
 
-        # Get the list of all users before the tests.
-        # Must evaluate the QuerySet or it will be lazily-evaluated later, which is wrong.
-        self.users_before = list(User.objects.values_list('id', flat=True).order_by('id'))
-        self.companies_before = list(Company.objects.values_list('id', flat=True).order_by('id'))
-        print ("Users before {!r}".format(self.users_before))
-        print ("Companies before {!r}".format(self.companies_before))
     def tearDown(self):
         self.browser.quit()
-        print ('start tearDown()')
-
-        # Get the list of all users after the tests.
-        users_after = list(User.objects.values_list('id', flat=True).order_by('id'))
-        companies_after = list(Company.objects.values_list('id', flat=True).order_by('id'))
-
-        print (users_after) 
-        print ("Companies after {!r}".format(companies_after))
-
-        # Calculate the set difference.
-        users_to_remove = sorted(list(set(users_after) - set(self.users_before)))
-        companies_to_remove = sorted(list(set(companies_after) - set(self.companies_before)))
-
-        print (users_to_remove) 
-        print ("Companies to remove {!r}".format(companies_to_remove))
-        
-        # Delete that difference from the database.
-        User.objects.filter(id__in=users_to_remove).delete()
-        Company.objects.filter(id__in=companies_to_remove).delete()
-
-        print ('Final User List')
-        users_after = list(User.objects.values_list('id', flat=True).order_by('id'))
-        companies_after = list(Company.objects.values_list('id', flat=True).order_by('id'))
-
-        print (users_after) 
-        print ("Companies after {!r}".format(companies_after))
-
-        print ('end tearDown()')
-
-        
-
         
     def fill_element_id(self,element_id,placeholder,data_input):
         inputbox = self.browser.find_element_by_id(element_id)
@@ -86,7 +34,8 @@ class NewCompanyTest(unittest.TestCase):
         #Amibentes Proyectados company has heard about an app that will help them rate their provider work.
 
         #Juanito that works in the company decided to explore the webpage: /SLAPP
-        self.browser.get('http://localhost:8000/slapp')
+        self.browser.get(self.live_server_url+'/slapp')
+
         ##self.browser.implicitely_wait(3)
         ##self.WebDriverWait(driver, 10)
 
@@ -170,18 +119,4 @@ class NewCompanyTest(unittest.TestCase):
 
         #
         self.fail('Finish the test')
-
-
-if __name__=='__main__':
-    unittest.main(warnings='ignore')
-    try:
-            setup_test_environment()
-            settings.DEBUG = False    
-            verbosity = 0
-            old_database_name = settings.DATABASE_NAME
-            connection.creation.create_test_db(verbosity)
-            unittest.main()
-    finally:
-        connection.creation.destroy_test_db(old_database_name, verbosity)
-        teardown_test_environment()
 
