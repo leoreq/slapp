@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse
 
 from django.template import RequestContext, loader
@@ -70,13 +70,22 @@ def profile_update(request):
         new_service_name=request.POST.get('service','Enter detail of service ofered')
         user_list=get_all_logged_in_users()
         try:
-            first_user=User(pk=user_list[0])
-        except:first_user=User.objects.create_user('testuser1','test@gmail.com',password='testpass')
-        print("el usuario es el %s"%first_user)
-        Company.objects.create(user=first_user,name=new_company_name,service=new_service_name)
-    else:
-        new_company_name='Enter Company Name'
-        new_service_name='Enter detail of service ofered'
+            #first_user=User(pk=user_list[0])
+            first_user=User.objects.create_user('testuser1','test@gmail.com',password='testpass')
+        except:
+            first_user=User(username='testuser1')
+            print("el usuario es el %s"%first_user.username)
+        try:
+            Company.objects.create(user=first_user,name=new_company_name,service=new_service_name)
+        except:
+            first_user.company.name=new_company_name
+            first_user.company.service=new_service_name
+            first_user.company.save()
+        return redirect('/slapp/profile_update/')
+    
+    new_company_name='Enter Company Name'
+    new_service_name='Enter detail of service ofered'
+
 
     return render(request,'sla_app/profile_update.html',
         {'new_company_name':new_company_name,

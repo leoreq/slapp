@@ -44,7 +44,7 @@ class InicioPageTest(TestCase):
         response = pag_inicio(request)
 
         self.assertEqual(response.status_code,302)
-        self.assertEqual(response['location'],'tdd/pag_inicio/')
+        self.assertEqual(response['location'],'/tdd/pag_inicio/')
 
     def test_pagina_inicio_displays_all_list_items(self):
         Item.objects.create(text='itemey 1')

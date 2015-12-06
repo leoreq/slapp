@@ -49,15 +49,16 @@ class CompanyProfileUpdateTest(TestCase):
         self.assertEqual(new_company.name,'New Testing Corp')
         self.assertEqual(new_company.service,'New Testing Services')
 
-        self.assertIn('New Testing Corp', response.content.decode())
-        self.assertIn('New Testing Services', response.content.decode())
+    def test_profile_update_can_redirect_after_POST_request(self):
+        request = HttpRequest()
+        request.method = 'POST'
+        request.POST['name'] = 'New Testing Corp'
+        request.POST['service'] = 'New Testing Services'
 
-        expected_html=render_to_string('sla_app/profile_update.html',{
-        'new_company_name':new_company.name,
-        'new_service_name':new_company.service,
-        })
+        response = profile_update(request)
 
-        self.assertEqual(response.content.decode(),expected_html)
+        self.assertEqual(response.status_code,302)
+        self.assertEqual(response['location'],'/slapp/profile_update/')
 
 class CompanyModelTest(TestCase):
 

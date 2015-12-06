@@ -23,7 +23,7 @@ from tdd.models import Item
 def pag_inicio(request):
     if request.method=='POST':
         Item.objects.create(text=request.POST['item_text'])
-        return redirect('/')
+        return redirect('/tdd/pag_inicio/')
 
     items=Item.objects.all()
 

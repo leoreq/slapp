@@ -49,8 +49,8 @@ class ItemListTest(unittest.TestCase):
 
         # When she hits enter, the page updates, and now the page lists
         # "1: Buy peacock feathers" as an item in a to-do list table
-        import time
-        time.sleep(10)
+        #import time
+        #time.sleep(10)
 
         inputbox.send_keys(Keys.ENTER)
 

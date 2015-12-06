@@ -1,12 +1,13 @@
 import os
 from os.path import abspath, dirname
 import sys
+import django
 
 # Set up django
 project_dir = abspath(dirname(dirname(__file__)))
 sys.path.insert(0, project_dir)
 os.environ['DJANGO_SETTINGS_MODULE'] = 'slapp.settings'
-
+django.setup()
 from django.db import connection
 from django.test.utils import setup_test_environment, teardown_test_environment
 
@@ -139,21 +140,22 @@ class NewCompanyTest(unittest.TestCase):
         self.fill_element_id('login-password2','confirm password','testpasss')
         self.browser.find_element_by_id('registerbutton').click();
         
-        #inputbox.send_keys(Keys.ENTER)
+        
         
 
         #Juanito gets prompted to a new page that asks for more info
         
-        import time
-        time.sleep(2)
 
         login_form=self.browser.find_element_by_id('profileupdateform')
 
         self.fill_element_id('id_company_name','Enter Company Name','New Testing Corp')
         self.fill_element_id('id_service','Enter detail of service ofered','New Testing Services')
+        
+        self.browser.find_element_by_id('updatebutton').click();
+
 
         import time
-        time.sleep(2)
+        time.sleep(5)
 
 
         #
