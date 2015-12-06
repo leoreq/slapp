@@ -72,7 +72,7 @@ def profile_update(request):
         try:
             first_user=User(pk=user_list[0])
         except:first_user=User.objects.create_user('testuser1','test@gmail.com',password='testpass')
-        print(first_user)
+        print("el usuario es el %s"%first_user)
         Company.objects.create(user=first_user,name=new_company_name,service=new_service_name)
     else:
         new_company_name='Enter Company Name'

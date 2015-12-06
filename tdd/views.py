@@ -1,11 +1,10 @@
-from django.shortcuts import render
 
 # Create your views here.
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse
 
 from django.template import RequestContext, loader
-
+from django import template
 
 import warnings
 
@@ -18,17 +17,16 @@ from django.utils.http import is_safe_url, urlsafe_base64_decode
 from django.shortcuts import resolve_url
 from tdd.models import Item
 
-# Create your views here.
+
 
 
 def pag_inicio(request):
     if request.method=='POST':
-        new_item_text=request.POST.get('item_text','')
-        Item.objects.create(text=new_item_text)
-    else:
-        new_item_text=''
+        Item.objects.create(text=request.POST['item_text'])
+        return redirect('/')
 
-    return render(request,'tdd/pagina_inicio.html',
-        {'new_item_text':new_item_text,
-        })
+    items=Item.objects.all()
+
+    return render(request,'tdd/pagina_inicio.html', {'items':items} )
+
 

@@ -49,8 +49,13 @@ class ItemListTest(unittest.TestCase):
 
         # When she hits enter, the page updates, and now the page lists
         # "1: Buy peacock feathers" as an item in a to-do list table
+        import time
+        time.sleep(10)
+
         inputbox.send_keys(Keys.ENTER)
 
+        import time
+        time.sleep(10)
 
 
         table = self.browser.find_element_by_id('id_list_table')
@@ -80,8 +85,8 @@ class ItemListTest(unittest.TestCase):
         rows = table.find_elements_by_tag_name('tr')
         self.check_item_in_row('1: Buy peacock feathers')
         self.check_item_in_row('2: Use peacock feathers to make a fly')
-        #import time
-        #time.sleep(2)
+        import time
+        time.sleep(5)
         
         # Edith wonders whether the site will remember her list. Then she sees
         # that the site has generated a unique URL for her -- there is some
