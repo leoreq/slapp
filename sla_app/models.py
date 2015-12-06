@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 
 class Company(models.Model):
 	#New User Field relationship has to be migrated in Django
-	user = models.OneToOneField(User)
+	user = models.OneToOneField(User,on_delete=models.SET_NULL, related_name="company", null=True, blank=True)
 	name=models.CharField(max_length=30,unique=True)
 	service=models.TextField(max_length=200,unique=True)
 	

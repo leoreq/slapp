@@ -50,7 +50,8 @@ def profile_update(request):
     if request.method=='POST':
         new_company_name=request.POST.get('name','Enter Company Name')
         new_service_name=request.POST.get('service','Enter detail of service ofered')
-        first_user=User.objects.create_user('testuser1','test@gmail.com',password='testpass')
+        #first_user=User.objects.create_user('testuser1','test@gmail.com',password='testpass')
+        active_user=request.user
         Company.objects.create(user=first_user,name=new_company_name,service=new_service_name)
     else:
         new_company_name='Enter Company Name'
