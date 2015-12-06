@@ -1,6 +1,5 @@
-import unittest
-import time
-from django.test import TestCase
+
+from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -9,7 +8,7 @@ from selenium.webdriver.common.keys import Keys
 
 
 
-class ItemListTest(unittest.TestCase):
+class ItemListTest(LiveServerTestCase):
 
 
     def setUp(self):
@@ -18,6 +17,7 @@ class ItemListTest(unittest.TestCase):
 
     def tearDown(self):
         self.browser.quit()
+        print(self.live_server_url)
 
 
     def check_item_in_row(self,item_name):
@@ -29,7 +29,8 @@ class ItemListTest(unittest.TestCase):
     def test_can_start_a_list_and_retrieve_it_later(self):
         # Edith has heard about a cool new online to-do app. She goes
         # to check out its homepage
-        self.browser.get('http://localhost:8000/tdd/pag_inicio')
+        #self.browser.get('http://localhost:8000/tdd/pag_inicio')
+        self.browser.get(self.live_server_url+'/tdd/pag_inicio')
 
         # She notices the page title and header mention to-do lists
         self.assertIn('To-Do', self.browser.title)
@@ -53,9 +54,6 @@ class ItemListTest(unittest.TestCase):
         #time.sleep(10)
 
         inputbox.send_keys(Keys.ENTER)
-
-        import time
-        time.sleep(10)
 
 
         table = self.browser.find_element_by_id('id_list_table')
@@ -97,7 +95,4 @@ class ItemListTest(unittest.TestCase):
         # Satisfied, she goes back to sleep
         self.fail('Finish the test!')
 
-
-if __name__=='__main__':
-    unittest.main(warnings='ignore')
 
