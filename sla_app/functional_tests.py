@@ -12,7 +12,7 @@ from django.db import connection
 from django.test.utils import setup_test_environment, teardown_test_environment
 
 from slapp import settings
-from sla_app.models import *
+from sla_app.models import Company
 
 import unittest
 import time
@@ -36,27 +36,37 @@ class NewCompanyTest(unittest.TestCase):
         # Get the list of all users before the tests.
         # Must evaluate the QuerySet or it will be lazily-evaluated later, which is wrong.
         self.users_before = list(User.objects.values_list('id', flat=True).order_by('id'))
-        print (self.users_before)
-
+        self.companies_before = list(Company.objects.values_list('id', flat=True).order_by('id'))
+        print ("Users before {!r}".format(self.users_before))
+        print ("Companies before {!r}".format(self.companies_before))
     def tearDown(self):
         self.browser.quit()
         print ('start tearDown()')
 
         # Get the list of all users after the tests.
         users_after = list(User.objects.values_list('id', flat=True).order_by('id'))
+        companies_after = list(Company.objects.values_list('id', flat=True).order_by('id'))
+
         print (users_after) 
+        print ("Companies after {!r}".format(companies_after))
+
         # Calculate the set difference.
         users_to_remove = sorted(list(set(users_after) - set(self.users_before)))
+        companies_to_remove = sorted(list(set(companies_after) - set(self.companies_before)))
+
         print (users_to_remove) 
+        print ("Companies to remove {!r}".format(companies_to_remove))
         
         # Delete that difference from the database.
-        print( User.objects.filter(id__in=users_to_remove))
-        
         User.objects.filter(id__in=users_to_remove).delete()
+        Company.objects.filter(id__in=companies_to_remove).delete()
 
         print ('Final User List')
         users_after = list(User.objects.values_list('id', flat=True).order_by('id'))
+        companies_after = list(Company.objects.values_list('id', flat=True).order_by('id'))
+
         print (users_after) 
+        print ("Companies after {!r}".format(companies_after))
 
         print ('end tearDown()')
 
