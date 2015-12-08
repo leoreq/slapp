@@ -24,9 +24,11 @@ from django.template.response import TemplateResponse
 from django.utils.http import is_safe_url, urlsafe_base64_decode
 from django.shortcuts import resolve_url
 
-##To get logged in user info 
+##To get logged in user info
 from django.contrib.sessions.models import Session
 from django.utils import timezone
+
+from django.core.exceptions import ObjectDoesNotExist
 
 def get_all_logged_in_users():
     # Query all non-expired sessions
@@ -64,33 +66,61 @@ def home(request):
 
 # Create your views here.
 
+from django.views.generic import DetailView
+from django.core.urlresolvers import reverse
+class CompanyDetailView(DetailView):
+    model = Company
+    template_name = 'sla_app/company.html'
+
+    def get_object(self):
+        try:
+            return self.request.user.company
+        except ObjectDoesNotExist:
+            return None
+
+    def dispatch(self, request, *args, **kwargs):
+        if self.get_object() is None:
+            return redirect(reverse('profile-create'))
+        else:
+            return super(CompanyDetailView, self).dispatch(request, *args, **kwargs)
+
+from django.views.generic import CreateView
+class CompanyCreateView(CreateView):
+    model = Company
+    fields = ['name', 'service']
+
+    def form_valid(self, form):
+        company = form.save(commit=False)
+        company.user = self.request.user
+        return super(CompanyCreateView, self).form_valid(form)
+
+    def get_absolute_url(self):
+        return reverse('profile')
+
+
 def profile_update(request):
     if request.method=='POST':
-        new_company_name=request.POST.get('name','Enter Company Name')
-        new_service_name=request.POST.get('service','Enter detail of service ofered')
-        user_list=get_all_logged_in_users()
+        new_company_name=request.POST.get('name', 'Enter Company Name')
+        new_service_name=request.POST.get('service', 'Enter detail of service ofered')
+
         try:
-            #first_user=User(pk=user_list[0])
-            first_user=User.objects.create_user('testuser1','test@gmail.com',password='testpass')
-        except:
-            first_user=User(username='testuser1')
-            print("el usuario es el %s"%first_user.username)
-        try:
-            Company.objects.create(user=first_user,name=new_company_name,service=new_service_name)
-        except:
-            first_user.company.name=new_company_name
-            first_user.company.service=new_service_name
-            first_user.company.save()
-        return redirect('/slapp/profile_update/')
-    
+            company = request.user.company
+        except ObjectDoesNotExist:
+            company = Company.objects.create(user=request.user)
+
+        company.name = new_company_name
+        company.service = new_service_name
+
+        company.save()
+
+        return redirect('/slapp/')
+
     new_company_name='Enter Company Name'
     new_service_name='Enter detail of service ofered'
 
-
-    return render(request,'sla_app/profile_update.html',
-        {'new_company_name':new_company_name,
-        'new_service_name':new_service_name,
-        })
+    return render(request,
+                  'sla_app/profile_update.html',
+                  {'new_company_name': new_company_name, 'new_service_name': new_service_name})
 
 
 #def profile_update(request, template_name='sla_app/profile_update.html',
@@ -112,7 +142,7 @@ def profile_update(request):
 #                redirect_to = resolve_url(settings.LOGIN_REDIRECT_URL)
 #
 #            # Save a new Article object from the form's data.
-#            
+#
 #            update_profile = form.save(commit=False)
 #            update_profile.user = request.user
 #            update_profile.save()
