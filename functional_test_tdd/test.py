@@ -77,7 +77,7 @@ class ItemListTest(LiveServerTestCase):
        
 
         edith_list_url=self.browser.current_url
-        self.assertRegex(edith_list_url,'/tdd/pag_inicio/lists/.+')
+        self.assertRegex(edith_list_url,'/tdd/lists/.+')
 
 
         # The page updates again, and now shows both items on her list
@@ -93,11 +93,11 @@ class ItemListTest(LiveServerTestCase):
         ## We use a new browser session to make sure that no information
         ## of Edith's is coming through from cookies etc #1
         self.browser.quit()
-        self.browser = webdriver.Firefox()
+        self.browser = webdriver.Chrome('/Users/LeeX/Dropbox/Programming/Thinkfull/python/django/slapp/sla_app/chromedriver')  # Optional argument, if not specified will search path.
 
         # Francis visits the home page.  There is no sign of Edith's
         # list
-        self.browser.get(self.live_server_url)
+        self.browser.get(self.live_server_url+'/tdd/pag_inicio')
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertNotIn('Buy peacock feathers', page_text)
         self.assertNotIn('make a fly', page_text)
@@ -110,7 +110,7 @@ class ItemListTest(LiveServerTestCase):
 
         # Francis gets his own unique URL
         francis_list_url = self.browser.current_url
-        self.assertRegex(francis_list_url, '/tdd/pag_inicio/lists/.+')
+        self.assertRegex(francis_list_url, '/tdd/lists/.+')
         self.assertNotEqual(francis_list_url, edith_list_url)
 
         # Again, there is no trace of Edith's list

@@ -25,11 +25,6 @@ class InicioPageTest(TestCase):
         self.assertEqual(response.content.decode(),expected_html)
 
 
-    def test_pagina_inicio_saves_only_when_needed(self):
-        request=HttpRequest()
-        response=pag_inicio(request)
-        self.assertEqual(Item.objects.count(),0)
-
 class ItemModelTest(TestCase):
 
     def test_saving_and_retrieving_items(self):
@@ -52,21 +47,21 @@ class ItemModelTest(TestCase):
 class ListViewTest(TestCase):
 
     def test_uses_a_list_template(self):
-        response=self.client.get('/tdd/pag_inicio/lists/the-only-list-in-the-world/')
+        response=self.client.get('/tdd/lists/the-only-list-in-the-world/')
         self.assertTemplateUsed(response,'tdd/list.html')
 
     def test_displays_all_list_items(self):
         Item.objects.create(text='itemey 1')
         Item.objects.create(text='itemey 2')
 
-        response = self.client.get('/tdd/pag_inicio/lists/the-only-list-in-the-world/')
+        response = self.client.get('/tdd/lists/the-only-list-in-the-world/')
 
         self.assertContains(response,'itemey 1')
         self.assertContains(response,'itemey 2')
 
 class NewListTest(TestCase):
     def test_save_a_POST_request(self):
-        request=self.client.post('tdd/pag_inicio/lists/new', data={'items':items})
+        self.client.post('/tdd/lists/new/', data={'item_text':'A new list item'})
 
         self.assertEqual(Item.objects.count(),1)
         new_item=Item.objects.first()
@@ -74,12 +69,7 @@ class NewListTest(TestCase):
 
         #self.assertIn('A new list item', response.content.decode())
     def test_redirect_after_a_POST_request(self):
-        request = HttpRequest()
-        request.method = 'POST'
-        request.POST['item_text'] = 'A new list item'
+        response=self.client.post('/tdd/lists/new/', data={'item_text':'A new list item'})
 
-        response = pag_inicio(request)
-
-        self.assertEqual(response.status_code,302)
-        self.assertEqual(response['location'],'/tdd/pag_inicio/lists/the-only-list-in-the-world/')
-
+        self.assertRedirects(response,'/tdd/lists/the-only-list-in-the-world/')
+       

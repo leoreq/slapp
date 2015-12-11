@@ -21,13 +21,12 @@ def view_list(request):
     items=Item.objects.all()
     return render(request,'tdd/list.html', {'items':items} )
 
+def new_list(request):
+    Item.objects.create(text=request.POST['item_text'])
+
+    return redirect('/tdd/lists/the-only-list-in-the-world/') 
 
 def pag_inicio(request):
-    if request.method=='POST':
-        Item.objects.create(text=request.POST['item_text'])
-        return redirect('/tdd/pag_inicio/lists/the-only-list-in-the-world/')
-
-
     return render(request,'tdd/pagina_inicio.html' )
 
 
