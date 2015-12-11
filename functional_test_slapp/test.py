@@ -95,7 +95,18 @@ class NewCompanyTest(StaticLiveServerTestCase):
         self.fill_element_id('login-password2','confirm password','testpasss')
         self.browser.find_element_by_id('registerbutton').click();
         
-        
+        #There he enters his login name.
+        self.fill_element_id('login-username','username or email','testuser2')
+
+ 
+        #Juanito mistakedly entered mismatching paswwords. 
+        # Penging ...
+        #Juanito then focuses and puts in matching passwords.
+
+        self.fill_element_id('login-password','password','testpasss')
+     
+        self.browser.find_element_by_id('login_button').click();
+                
         
 
         #Juanito gets prompted to a new page that asks for more info

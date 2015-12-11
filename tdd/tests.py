@@ -24,27 +24,6 @@ class InicioPageTest(TestCase):
 
         self.assertEqual(response.content.decode(),expected_html)
 
-    def test_pagina_inicio_can_save_a_POST_request(self):
-        request = HttpRequest()
-        request.method = 'POST'
-        request.POST['item_text'] = 'A new list item'
-
-        response = pag_inicio(request)
-
-        self.assertEqual(Item.objects.count(),1)
-        new_item=Item.objects.first()
-        self.assertEqual(new_item.text,'A new list item')
-
-        #self.assertIn('A new list item', response.content.decode())
-    def test_pagina_inicio_can_redirect_after_a_POST_request(self):
-        request = HttpRequest()
-        request.method = 'POST'
-        request.POST['item_text'] = 'A new list item'
-
-        response = pag_inicio(request)
-
-        self.assertEqual(response.status_code,302)
-        self.assertEqual(response['location'],'/tdd/pag_inicio/lists/the-only-list-in-the-world/')
 
     def test_pagina_inicio_saves_only_when_needed(self):
         request=HttpRequest()
@@ -84,3 +63,23 @@ class ListViewTest(TestCase):
 
         self.assertContains(response,'itemey 1')
         self.assertContains(response,'itemey 2')
+
+class NewListTest(TestCase):
+    def test_save_a_POST_request(self):
+        request=self.client.post('tdd/pag_inicio/lists/new', data={'items':items})
+
+        self.assertEqual(Item.objects.count(),1)
+        new_item=Item.objects.first()
+        self.assertEqual(new_item.text,'A new list item')
+
+        #self.assertIn('A new list item', response.content.decode())
+    def test_redirect_after_a_POST_request(self):
+        request = HttpRequest()
+        request.method = 'POST'
+        request.POST['item_text'] = 'A new list item'
+
+        response = pag_inicio(request)
+
+        self.assertEqual(response.status_code,302)
+        self.assertEqual(response['location'],'/tdd/pag_inicio/lists/the-only-list-in-the-world/')
+
