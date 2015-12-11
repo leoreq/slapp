@@ -44,17 +44,7 @@ class InicioPageTest(TestCase):
         response = pag_inicio(request)
 
         self.assertEqual(response.status_code,302)
-        self.assertEqual(response['location'],'/tdd/pag_inicio/')
-
-    def test_pagina_inicio_displays_all_list_items(self):
-        Item.objects.create(text='itemey 1')
-        Item.objects.create(text='itemey 2')
-
-        request = HttpRequest()
-        response = pag_inicio(request)
-
-        self.assertIn('itemey 1',response.content.decode())
-        self.assertIn('itemey 2',response.content.decode())
+        self.assertEqual(response['location'],'/tdd/pag_inicio/lists/the-only-list-in-the-world/')
 
     def test_pagina_inicio_saves_only_when_needed(self):
         request=HttpRequest()
@@ -79,3 +69,18 @@ class ItemModelTest(TestCase):
         second_saved_item = saved_items[1]
         self.assertEqual(first_saved_item.text, 'The first (ever) list item')
         self.assertEqual(second_saved_item.text, 'Item the second')
+
+class ListViewTest(TestCase):
+
+    def test_uses_a_list_template(self):
+        response=self.client.get('/tdd/pag_inicio/lists/the-only-list-in-the-world/')
+        self.assertTemplateUsed(response,'tdd/list.html')
+
+    def test_displays_all_list_items(self):
+        Item.objects.create(text='itemey 1')
+        Item.objects.create(text='itemey 2')
+
+        response = self.client.get('/tdd/pag_inicio/lists/the-only-list-in-the-world/')
+
+        self.assertContains(response,'itemey 1')
+        self.assertContains(response,'itemey 2')

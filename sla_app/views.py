@@ -30,6 +30,7 @@ from django.utils import timezone
 
 from django.core.exceptions import ObjectDoesNotExist
 
+
 def get_all_logged_in_users():
     # Query all non-expired sessions
     # use timezone.now() instead of datetime.now() in latest versions of Django

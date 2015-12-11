@@ -20,7 +20,7 @@ class NewCompanyTest(StaticLiveServerTestCase):
 
     def tearDown(self):
         self.browser.quit()
-        
+
     def fill_element_id(self,element_id,placeholder,data_input):
         inputbox = self.browser.find_element_by_id(element_id)
         self.assertEqual(
@@ -35,9 +35,6 @@ class NewCompanyTest(StaticLiveServerTestCase):
 
         #Juanito that works in the company decided to explore the webpage: /SLAPP
         self.browser.get(self.live_server_url+'/slapp')
-
-        ##self.browser.implicitely_wait(3)
-        ##self.WebDriverWait(driver, 10)
 
         #Juanito is on the go so just is navigating the web page through his cell phone, and realizez that there is a nice welcoming page.
         
@@ -68,7 +65,6 @@ class NewCompanyTest(StaticLiveServerTestCase):
 
         #Juanito explores the page and enters the Company section
         self.browser.find_element(By.ID, "companies_button").click()
-        WebDriverWait(self.browser, 10)
 
         login_form=self.browser.find_element_by_tag_name('form')
 
@@ -114,7 +110,7 @@ class NewCompanyTest(StaticLiveServerTestCase):
 
 
         import time
-        time.sleep(5)
+        time.sleep(3)
 
 
         #
