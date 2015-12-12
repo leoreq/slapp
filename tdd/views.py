@@ -15,14 +15,15 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.template.response import TemplateResponse
 from django.utils.http import is_safe_url, urlsafe_base64_decode
 from django.shortcuts import resolve_url
-from tdd.models import Item
+from tdd.models import Item,List
 
 def view_list(request):
     items=Item.objects.all()
     return render(request,'tdd/list.html', {'items':items} )
 
 def new_list(request):
-    Item.objects.create(text=request.POST['item_text'])
+    list_=List.objects.create()
+    Item.objects.create(text=request.POST['item_text'],list=list_)
 
     return redirect('/tdd/lists/the-only-list-in-the-world/') 
 
