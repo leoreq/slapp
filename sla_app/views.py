@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,resolve_url
 from django.http import HttpResponse
 
 from django.template import RequestContext, loader
@@ -22,7 +22,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.response import TemplateResponse
 from django.utils.http import is_safe_url, urlsafe_base64_decode
-from django.shortcuts import resolve_url
+
 
 ##To get logged in user info
 from django.contrib.sessions.models import Session
@@ -101,9 +101,9 @@ class CompanyCreateView(CreateView):
 
 def profile_update(request):
     if request.method=='POST':
-        new_company_name=request.POST.get('name', 'Enter Company Name')
-        new_service_name=request.POST.get('service', 'Enter detail of service ofered')
-
+        print ("printin user request data : %s"request.user)
+        new_company_name=request.POST['name']
+        new_service_name=request.POST['service']
         try:
             company = request.user.company
         except ObjectDoesNotExist:

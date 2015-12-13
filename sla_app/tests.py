@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase,Client
 #Core resolvers are the ones that will process the User URL request.
 from django.core.urlresolvers import resolve
 from sla_app.views import home,pag_inicio,profile_update
@@ -6,7 +6,7 @@ from django.http import HttpRequest
 from django.template.loader import render_to_string
 from sla_app.models import Company
 from django.contrib.auth.models import User
-
+from django.contrib.auth import login,authenticate
 # Create your tests here.
 
 #class SmokeTest(TestCase):
@@ -30,6 +30,10 @@ class HomePageTest(TestCase):
         self.assertEqual(response.content.decode(),expected_html)
 
 class CompanyProfileUpdateTest(TestCase):
+    def setUp(self):
+        test_user=User.objects.create(username="test_user",password="testpass")
+        self.c=self.client
+        self.c.login(username="test_user",password="testpass")
 
     def test_page_urlresolve_to_profile_update_view(self):
         found=resolve('/slapp/profile_update/')
@@ -37,25 +41,35 @@ class CompanyProfileUpdateTest(TestCase):
         self.assertEqual(found.func,profile_update)
 
     def test_profile_update_can_save_a_POST_request(self):
-        request = HttpRequest()
-        request.method = 'POST'
-        request.POST['name'] = 'New Testing Corp'
-        request.POST['service'] = 'New Testing Services'
-
-        response = profile_update(request)
-
-        self.assertEqual(Company.objects.count(),1)
+        #request = HttpRequest()
+        #request.method = 'POST'
+        #request.POST['name'] = 'New Testing Corp'
+        #request.POST['service'] = 'New Testing Services'
+#
+        #response = profile_update(request)
+#
+        #self.assertEqual(Company.objects.count(),1)
+        #new_company=Company.objects.first()
+        #self.assertEqual(new_company.name,'New Testing Corp')
+        #self.assertEqual(new_company.service,'New Testing Services')
+        
+        response=self.c.post('/slapp/profile_update/', 
+            data={'name':'A new list item',
+            'service': 'New Testing Services'})
+        
+        print ('this is the user %s'%response.user)
+        
+        self.assertEqual(Item.objects.count(),1)
         new_company=Company.objects.first()
         self.assertEqual(new_company.name,'New Testing Corp')
         self.assertEqual(new_company.service,'New Testing Services')
 
-    def test_profile_update_can_redirect_after_POST_request(self):
-        request = HttpRequest()
-        request.method = 'POST'
-        request.POST['name'] = 'New Testing Corp'
-        request.POST['service'] = 'New Testing Services'
 
-        response = profile_update(request)
+    def test_profile_update_can_redirect_after_POST_request(self):
+
+        response = self.client.post('/slapp/profile_update/', 
+            {'name':'A new list item',
+            'service': 'New Testing Services'})
 
         self.assertEqual(response.status_code,302)
         self.assertEqual(response['location'],'/slapp/profile_update/')
