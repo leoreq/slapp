@@ -101,7 +101,6 @@ class CompanyCreateView(CreateView):
 
 def profile_update(request):
     if request.method=='POST':
-        print ("printin user request data : %s"request.user)
         new_company_name=request.POST['name']
         new_service_name=request.POST['service']
         try:

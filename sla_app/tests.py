@@ -31,7 +31,7 @@ class HomePageTest(TestCase):
 
 class CompanyProfileUpdateTest(TestCase):
     def setUp(self):
-        test_user=User.objects.create(username="test_user",password="testpass")
+        test_user=User.objects.create_user(username="test_user",password="testpass")
         self.c=self.client
         self.c.login(username="test_user",password="testpass")
 
@@ -51,15 +51,13 @@ class CompanyProfileUpdateTest(TestCase):
         #self.assertEqual(Company.objects.count(),1)
         #new_company=Company.objects.first()
         #self.assertEqual(new_company.name,'New Testing Corp')
-        #self.assertEqual(new_company.service,'New Testing Services')
-        
-        response=self.c.post('/slapp/profile_update/', 
-            data={'name':'A new list item',
+        #self.assertEqual(new_company.service,0'New Testing Services')
+
+        response=self.client.post('/slapp/profile_update/', 
+            {'name':'New Testing Corp',
             'service': 'New Testing Services'})
-        
-        print ('this is the user %s'%response.user)
-        
-        self.assertEqual(Item.objects.count(),1)
+                
+        self.assertEqual(Company.objects.count(),1)
         new_company=Company.objects.first()
         self.assertEqual(new_company.name,'New Testing Corp')
         self.assertEqual(new_company.service,'New Testing Services')
@@ -71,9 +69,10 @@ class CompanyProfileUpdateTest(TestCase):
             {'name':'A new list item',
             'service': 'New Testing Services'})
 
-        self.assertEqual(response.status_code,302)
-        self.assertEqual(response['location'],'/slapp/profile_update/')
-
+        #self.assertEqual(response.status_code,302)
+        #self.assertEqual(response['location'],'/slapp/profile_update/')
+        self.assertRedirects(response,'/slapp/')
+        
 class CompanyModelTest(TestCase):
 
     def test_saving_and_retrieving_items(self):
