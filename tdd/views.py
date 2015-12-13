@@ -17,17 +17,21 @@ from django.utils.http import is_safe_url, urlsafe_base64_decode
 from django.shortcuts import resolve_url
 from tdd.models import Item,List
 
-def view_list(request):
-    items=Item.objects.all()
-    return render(request,'tdd/list.html', {'items':items} )
+def view_list(request,list_id):
+    list_=List.objects.get(id=list_id)
+    return render(request,'tdd/list.html', {'list':list_} )
 
 def new_list(request):
     list_=List.objects.create()
     Item.objects.create(text=request.POST['item_text'],list=list_)
 
-    return redirect('/tdd/lists/the-only-list-in-the-world/') 
+    return redirect('/tdd/lists/%d/'%(list_.id)) 
 
 def pag_inicio(request):
     return render(request,'tdd/pagina_inicio.html' )
 
+def add_item(request,list_id):
+    list_=List.objects.get(id=list_id)
+    Item.objects.create(text=request.POST['item_text'],list=list_)
 
+    return redirect('/tdd/lists/%d/'%(list_.id)) 
