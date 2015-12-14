@@ -119,6 +119,18 @@ class NewCompanyTest(StaticLiveServerTestCase):
         
         self.browser.find_element_by_id('updatebutton').click();
 
+        #Juantito is redirected to the profile and can see all his updated information and some action buttons
+        ## Company profile update page should be SLAPP/COMPANY/company_id/
+        junaito_profile_url = self.browser.current_url
+        self.assertRegex(junaito_profile_url , '/slapp/company/.+')
+        
+        #CreateService Button
+        ##Create service button will promt user to create a service, and add all the elements that it needs in order to fully replicate their sla".
+        #
+        ##Assuming that the session is logged in, URL: SLAPP/COMPANY/company_id/services/service_id
+        #CreateProvider Button
+        ##This will update a list of providers,URL: SLAPP/COMPANY/company_id/providers/provider_id
+        #Issue SLA Button
 
         import time
         time.sleep(3)

@@ -113,7 +113,7 @@ def profile_update(request):
 
         company.save()
 
-        return redirect('/slapp/')
+        return redirect('/slapp/company/%d/'%company.user.id)
 
     new_company_name='Enter Company Name'
     new_service_name='Enter detail of service ofered'
@@ -122,6 +122,9 @@ def profile_update(request):
                   'sla_app/profile_update.html',
                   {'new_company_name': new_company_name, 'new_service_name': new_service_name})
 
+def view_company(request,user_id):
+    active_company=Company.objects.get(user__id=user_id)
+    return render(request,'sla_app/company_profile.html',{'company':active_company})
 
 #def profile_update(request, template_name='sla_app/profile_update.html',
 #          redirect_field_name=REDIRECT_FIELD_NAME,

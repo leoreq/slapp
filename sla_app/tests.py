@@ -66,13 +66,23 @@ class CompanyProfileUpdateTest(TestCase):
     def test_profile_update_can_redirect_after_POST_request(self):
 
         response = self.client.post('/slapp/profile_update/', 
-            {'name':'A new list item',
+            {'name':'New Testing Corp',
             'service': 'New Testing Services'})
-
+        new_company=Company.objects.first()
         #self.assertEqual(response.status_code,302)
         #self.assertEqual(response['location'],'/slapp/profile_update/')
-        self.assertRedirects(response,'/slapp/')
+        self.assertRedirects(response,'/slapp/company/%d/'%new_company.user.id)
+
+    def test_profile_info_ca_be_rendered_after_redirect(self):
+        response = self.client.post('/slapp/profile_update/', 
+            {'name':'New Testing Corp',
+            'service': 'New Testing Services'})
+        new_company=Company.objects.first()
         
+        response2=self.client.get('/slapp/company/%d/'%new_company.user.id)
+        print ("New company user id is {} , vs company_id is {}".format(new_company.user.id,new_company.id))
+        self.assertContains(response2,new_company.name)
+        self.assertContains(response2,new_company.service)
 class CompanyModelTest(TestCase):
 
     def test_saving_and_retrieving_items(self):
