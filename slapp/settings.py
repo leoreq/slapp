@@ -125,3 +125,5 @@ STATIC_URL = '/static/'
 
 
 LOGIN_REDIRECT_URL =('/slapp/profile_update/')
+
+

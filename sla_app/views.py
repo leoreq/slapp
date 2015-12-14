@@ -114,17 +114,36 @@ def profile_update(request):
         company.save()
 
         return redirect('/slapp/company/%d/'%company.user.id)
+    
 
-    new_company_name='Enter Company Name'
-    new_service_name='Enter detail of service ofered'
+    new_company_name="Enter Company Name"
+    new_service_name="Enter detail of service ofered"
 
     return render(request,
                   'sla_app/profile_update.html',
                   {'new_company_name': new_company_name, 'new_service_name': new_service_name})
 
-def view_company(request,user_id):
-    active_company=Company.objects.get(user__id=user_id)
-    return render(request,'sla_app/company_profile.html',{'company':active_company})
+#def view_company(request,user_id):
+#    active_company=Company.objects.get(user__id=user_id)
+#    return render(request,'sla_app/company_profile.html',{'company':active_company})
+
+class view_company(DetailView):
+    model = Company
+    template_name = 'sla_app/company_profile.html'
+    slug_field ='user_id'
+
+    def get_object(self):
+        try:
+            print(' Check if args are passed:{}'.format(self.kwargs['user_id']))
+            return Company.objects.get(user__id=self.kwargs['user_id'])
+        except ObjectDoesNotExist:
+            return None
+
+    def dispatch(self, request, *args, **kwargs):
+        if self.get_object() is None:
+            return redirect(reverse('profile_update'))
+        else:
+            return super(view_company, self).dispatch(request, *args, **kwargs)
 
 #def profile_update(request, template_name='sla_app/profile_update.html',
 #          redirect_field_name=REDIRECT_FIELD_NAME,

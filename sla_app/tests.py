@@ -80,9 +80,21 @@ class CompanyProfileUpdateTest(TestCase):
         new_company=Company.objects.first()
         
         response2=self.client.get('/slapp/company/%d/'%new_company.user.id)
-        print ("New company user id is {} , vs company_id is {}".format(new_company.user.id,new_company.id))
+        
         self.assertContains(response2,new_company.name)
         self.assertContains(response2,new_company.service)
+
+    def test_correct_profile_info_is_rendered_after_redirect(self):
+        response = self.client.post('/slapp/profile_update/', 
+            {'name':'New Testing Corp',
+            'service': 'New Testing Services'})
+        new_company=Company.objects.first()
+        
+        response2=self.client.get('/slapp/company/%d/'%new_company.user.id)
+        
+        self.assertContains(response2,new_company.name)
+        self.assertContains(response2,new_company.service)
+
 class CompanyModelTest(TestCase):
 
     def test_saving_and_retrieving_items(self):
