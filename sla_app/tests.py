@@ -1,7 +1,7 @@
 from django.test import TestCase,Client
 #Core resolvers are the ones that will process the User URL request.
 from django.core.urlresolvers import resolve
-from sla_app.views import home,pag_inicio,profile_update
+from sla_app.views import home,pag_inicio,profile_update,create_service_contract
 from django.http import HttpRequest
 from django.template.loader import render_to_string
 from sla_app.models import Company
@@ -9,10 +9,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login,authenticate
 # Create your tests here.
 
-#class SmokeTest(TestCase):
-#
-#    def test_bad_maths():
-#        self.assertEqual(1+1,3)
 
 class HomePageTest(TestCase):
 
@@ -40,18 +36,11 @@ class CompanyProfileUpdateTest(TestCase):
 
         self.assertEqual(found.func,profile_update)
 
+    def test_uses_a_profile_update_template(self):
+        response=self.client.get('/slapp/profile_update/')
+        self.assertTemplateUsed(response,'sla_app/profile_update.html')
+
     def test_profile_update_can_save_a_POST_request(self):
-        #request = HttpRequest()
-        #request.method = 'POST'
-        #request.POST['name'] = 'New Testing Corp'
-        #request.POST['service'] = 'New Testing Services'
-#
-        #response = profile_update(request)
-#
-        #self.assertEqual(Company.objects.count(),1)
-        #new_company=Company.objects.first()
-        #self.assertEqual(new_company.name,'New Testing Corp')
-        #self.assertEqual(new_company.service,0'New Testing Services')
 
         response=self.client.post('/slapp/profile_update/', 
             {'name':'New Testing Corp',
@@ -84,16 +73,47 @@ class CompanyProfileUpdateTest(TestCase):
         self.assertContains(response2,new_company.name)
         self.assertContains(response2,new_company.service)
 
+class CompanyProfileViewTest(TestCase):
+    def setUp(self):
+        self.test_user=User.objects.create_user(username="test_user",password="testpass")
+        self.c=self.client
+        self.c.login(username="test_user",password="testpass")
+    
     def test_correct_profile_info_is_rendered_after_redirect(self):
-        response = self.client.post('/slapp/profile_update/', 
-            {'name':'New Testing Corp',
-            'service': 'New Testing Services'})
-        new_company=Company.objects.first()
+        test_user=User.objects.get(username="test_user")
+        new_company=Company.objects.create(user=test_user,name='New Testing Corp',service='This is a company that tests things')
         
-        response2=self.client.get('/slapp/company/%d/'%new_company.user.id)
+        response=self.client.get('/slapp/company/%d/'%new_company.user.id)
         
-        self.assertContains(response2,new_company.name)
-        self.assertContains(response2,new_company.service)
+        self.assertContains(response,new_company.name)
+        self.assertContains(response,new_company.service)
+
+    def test_uses_a_CompanyProfile_template(self):
+        test_user=User.objects.get(username="test_user")
+        new_company=Company.objects.create(user=test_user,name='New Testing Corp',service='This is a company that tests things')
+          
+        response=self.client.get('/slapp/company/%d/'%new_company.user.id)
+        self.assertTemplateUsed(response,'sla_app/company_profile.html')
+
+class ServiceContractCreateViewTest(TestCase):
+    def setUp(self):
+        self.test_user=User.objects.create_user(username="test_user",password="testpass")
+        self.c=self.client
+        self.c.login(username="test_user",password="testpass")
+
+    def test_page_urlresolve_to_profile_update_view(self):
+        
+        found=resolve('/slapp/company/%d/service_contract/')
+
+        self.assertEqual(found.func,create_service_contract)
+
+    def test_service_contract_urlresolve_to_profile_update_view(self):
+        test_user=User.objects.get(username="test_user")
+        new_company=Company.objects.create(user=test_user,name='New Testing Corp',service='This is a company that tests things')
+
+        response=self.client.get('/slapp/company/%d/service_contract/'%new_company.user.id)
+
+        self.assertTemplateUsed(response,'sla_app/create_service_contract.html')
 
 class CompanyModelTest(TestCase):
 
@@ -121,15 +141,4 @@ class CompanyModelTest(TestCase):
         second_saved_item = saved_items[0]
         self.assertEqual(first_saved_item.name, 'New Testing Corp')
         self.assertEqual(second_saved_item.service, 'This is a company that should tests things')
-
-
-
-    # for later --> def test_profile_update_can_save_a_POST_request(self):
-    # for later -->     request=HttpRequest()
-    # for later -->     request.method='POST'
-    # for later -->     request.POST['name']='Test Company Name'
-    # for later --> 
-    # for later -->     response=profile_update(request)
-    # for later --> 
-    # for later -->     self.assertIn('Test Company Name',response.content.decode())
 

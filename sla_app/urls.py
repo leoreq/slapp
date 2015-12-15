@@ -12,6 +12,6 @@ urlpatterns = [
     url(r'^profile_update/$', views.profile_update, name='profile_update'),
     #url(r'^company/(?P<user_id>\d+)/$',views.view_company,name='view_company'),
     url(r'^company/(?P<user_id>\d+)/$',views.view_company.as_view(),name='view_company'),
+    url(r'^company/(?P<user_id>\d+)/service_contract/$',views.create_service_contract,name='create_service_contract'),
 
 ]
-'lists/(\d+)/$'

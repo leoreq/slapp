@@ -47,6 +47,9 @@ def get_all_logged_in_users():
 # Create your views here.
 # Create your views here.
 
+def create_service_contract(request,user_id):
+    active_company=Company.objects.get(user__id=user_id)
+    return render(request,'sla_app/create_service_contract.html',{'company':active_company})
 
 def pag_inicio(request):
     return render(request,'sla_app/pagina_inicio.html',{'new_item_text':request.POST.get('item_text','')})
@@ -134,7 +137,6 @@ class view_company(DetailView):
 
     def get_object(self):
         try:
-            print(' Check if args are passed:{}'.format(self.kwargs['user_id']))
             return Company.objects.get(user__id=self.kwargs['user_id'])
         except ObjectDoesNotExist:
             return None

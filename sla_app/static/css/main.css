@@ -6,6 +6,7 @@ html {
 
 body {
     padding-top: 10em; /* 60px to make the container go all the way to the bottom of the topbar */
+    padding-bottom: 8em;
     /*background-color: #58657F;*/
     /* Margin bottom by footer height */
     margin-bottom: 5em;
