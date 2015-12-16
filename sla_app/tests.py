@@ -100,16 +100,17 @@ class ServiceContractCreateViewTest(TestCase):
         self.test_user=User.objects.create_user(username="test_user",password="testpass")
         self.c=self.client
         self.c.login(username="test_user",password="testpass")
+        new_company=Company.objects.create(user=self.test_user,name='New Testing Corp',service='This is a company that tests things')
 
     def test_page_urlresolve_to_profile_update_view(self):
+        new_company=Company.objects.get(name='New Testing Corp')
         
-        found=resolve('/slapp/company/%d/service_contract/')
+        found=resolve('/slapp/company/%d/service_contract/'%new_company.user.id)
 
         self.assertEqual(found.func,create_service_contract)
 
     def test_service_contract_urlresolve_to_profile_update_view(self):
-        test_user=User.objects.get(username="test_user")
-        new_company=Company.objects.create(user=test_user,name='New Testing Corp',service='This is a company that tests things')
+        new_company=Company.objects.get(name='New Testing Corp')
 
         response=self.client.get('/slapp/company/%d/service_contract/'%new_company.user.id)
 

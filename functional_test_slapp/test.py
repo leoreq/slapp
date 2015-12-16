@@ -126,21 +126,25 @@ class NewCompanyTest(StaticLiveServerTestCase):
         
         #Create Service Contract Button
         ##Create service button will promt user to create a service, and add all the elements that it needs in order to fully replicate their sla".
+    
+
         button = self.browser.find_element_by_id('create_service_contract_button').click()
         #
         ##Assuming that the session is logged in, URL: SLAPP/COMPANY/company_id/services/service_id
         junaito_profile_url = self.browser.current_url
         self.assertRegex(junaito_profile_url , '/slapp/company/.+/service_contract/')
         page_text = self.browser.find_element_by_tag_name('body').text
-        self.assertNotIn('Buy peacock feathers', page_text)
-        self.assertNotIn('make a fly', page_text)
+        self.assertNotIn('Manage your contracts in a fly', page_text)
+        self.assertIn('Add all the terms of your contract', page_text)
 
+        import time
+        time.sleep(3)
+        
         #CreateProvider Button
         ##This will update a list of providers,URL: SLAPP/COMPANY/company_id/providers/provider_id
         #Issue SLA Button
 
-        import time
-        time.sleep(3)
+  
 
 
         #
