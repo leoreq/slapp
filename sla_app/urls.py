@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse_lazy
 
 
 from . import views 
+#from . import views as sla_app_views
 
 urlpatterns = [
     #url(r'^index/$', views.index, name='index'),
@@ -13,5 +14,9 @@ urlpatterns = [
     #url(r'^company/(?P<user_id>\d+)/$',views.view_company,name='view_company'),
     url(r'^company/(?P<user_id>\d+)/$',views.view_company.as_view(),name='view_company'),
     url(r'^company/(?P<user_id>\d+)/service_contract/$',views.create_service_contract,name='create_service_contract'),
+
+
+    url(r'^company/(?P<user_id>\d+)/service_contract/(?P<list_id>\d+)/$',views.view_list,name='slapp_view_list'),
+    url(r'^company/(?P<user_id>\d+)/service_contract/(?P<list_id>\d+)/add_item$',views.add_item,name='slapp_add_item'),
 
 ]

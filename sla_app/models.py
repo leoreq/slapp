@@ -5,6 +5,15 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
+class List(models.Model):
+    pass
+
+class Item(models.Model):
+    text=models.TextField(default='')
+    list=models.ForeignKey(List,default=None)
+    status=models.BooleanField(default=False)
+
+
 class Company(models.Model):
 	#New User Field relationship has to be migrated in Django
 	user = models.OneToOneField(User,on_delete=models.SET_NULL, related_name="company", null=True, blank=True)

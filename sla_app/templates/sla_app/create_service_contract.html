@@ -33,25 +33,19 @@
     <div class="row">
         <div class="col-xs-
         12">
-        <form class="form-inline">
-            <div class="form-group">
-                <label for="detail">Enter Service Detail</label>
-                <input type="text" class="form-control" id="detail" placeholder="Eg .- Product Delivered on Time.">
-            </div>
-            <button type="submit" class="btn btn-default">Add Contract Point</button>
-        </form>        
-
-<form method="POST" action='/tdd/lists/{{list.id}}/add_item'>
+            <form class="form-inline" method="POST" action='slapp/company/{{company.id}}/service_contract/{{list.id}}/add_item'>
                 {%csrf_token%}
-               <input name="item_text" id="id_new_item" placeholder="Enter a to-do item" />
-            </form>
-
+                <div class="form-group">
+                    <label for="detail">Enter Service Detail</label>
+                    <input type="text" class="form-control" name="item_text" id="id_new_item"  placeholder="Eg .- Product Delivered on Time.">
+                </div>
+                <button type="submit" class="btn btn-default">Add Contract Point</button>
+            </form>        
             <table id='id_list_table'> 
                 {% for item in list.item_set.all %}
                 <tr><td>{{forloop.counter}}: {{ item.text }} </td></tr> 
                 {% endfor %}
             </table>
-
         </div>
     </div>
 

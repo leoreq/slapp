@@ -3,7 +3,7 @@ from django.http import HttpResponse
 
 from django.template import RequestContext, loader
 from sla_app.forms import CompanyForm
-from sla_app.models import Company
+from sla_app.models import Company,Item,List
 from django.contrib.auth.models import User
 
 from django.views.decorators.cache import never_cache
@@ -47,9 +47,31 @@ def get_all_logged_in_users():
 # Create your views here.
 # Create your views here.
 
+
+def view_list(request,user_id,list_id):
+    list_=List.objects.get(id=list_id)
+    active_company=Company.objects.get(user__id=user_id)
+    return render(request,'sla_app/create_service_contract.html', {'list':list_,'company':active_company} )
+
+def new_list(request,user_id):
+    list_=List.objects.create()
+    active_company=Company.objects.get(user__id=user_id)
+    Item.objects.create(text=request.POST['item_text'],list=list_)
+
+    return redirect('/slapp/company/%d/service_contract/%d/'%(company.user.id,list_.id)) 
+
+def add_item(request,user_id,list_id):
+    active_company=Company.objects.get(user__id=user_id)
+    list_=List.objects.get(id=list_id)
+    
+    Item.objects.create(text=request.POST['item_text'],list=list_)
+
+    return redirect('/slapp/company/%d/service_contract/%d/'%(active_company.user.id,list_.id)) 
+
 def create_service_contract(request,user_id):
     active_company=Company.objects.get(user__id=user_id)
-    return render(request,'sla_app/create_service_contract.html',{'company':active_company})
+    list_=List.objects.create()
+    return render(request,'sla_app/create_service_contract.html',{'list':list_,'company':active_company})
 
 def pag_inicio(request):
     return render(request,'sla_app/pagina_inicio.html',{'new_item_text':request.POST.get('item_text','')})

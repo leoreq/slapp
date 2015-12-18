@@ -136,10 +136,14 @@ class NewCompanyTest(StaticLiveServerTestCase):
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertNotIn('Manage your contracts in a fly', page_text)
         self.assertIn('Add all the terms of your contract', page_text)
+        
+        self.fill_element_id('id_new_item','Enter Service Detail','Deliver the testing suite in a timely manner')
+        self.check_item_in_row('1: Deliver the testing suite in a timely manner')
+
 
         import time
         time.sleep(3)
-        
+
         #CreateProvider Button
         ##This will update a list of providers,URL: SLAPP/COMPANY/company_id/providers/provider_id
         #Issue SLA Button

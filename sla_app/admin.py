@@ -1,11 +1,15 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Company,Provider,Services
+from .models import Company,Provider,Services,Item,List
 
 admin.site.register(Company)
+admin.site.register(List)
+admin.site.register(Item)
 admin.site.register(Provider)
 admin.site.register(Services)
+
+
 
 
 from django.contrib.auth.admin import UserAdmin
