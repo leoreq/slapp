@@ -21,6 +21,7 @@ class NewCompanyTest(StaticLiveServerTestCase):
     def tearDown(self):
         self.browser.quit()
 
+
     def fill_element_id(self,element_id,placeholder,data_input):
         inputbox = self.browser.find_element_by_id(element_id)
         self.assertEqual(
@@ -28,6 +29,12 @@ class NewCompanyTest(StaticLiveServerTestCase):
                 placeholder
         )
         inputbox.send_keys(data_input)
+
+    def check_item_in_row(self,item_name):
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        print('{!r}'.format(rows))
+        self.assertIn(item_name,[row.text for row in rows])
 
     def test_new_company_login(self):
 
@@ -137,7 +144,11 @@ class NewCompanyTest(StaticLiveServerTestCase):
         self.assertNotIn('Manage your contracts in a fly', page_text)
         self.assertIn('Add all the terms of your contract', page_text)
         
-        self.fill_element_id('id_new_item','Enter Service Detail','Deliver the testing suite in a timely manner')
+        self.fill_element_id('id_new_item','Eg .- Product Delivered on Time.','Deliver the testing suite in a timely manner')
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys(Keys.ENTER)
+        import time
+        time.sleep(1)
         self.check_item_in_row('1: Deliver the testing suite in a timely manner')
 
 
