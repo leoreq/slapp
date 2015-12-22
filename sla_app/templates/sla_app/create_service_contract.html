@@ -41,14 +41,23 @@
                 </div>
                 <button type="submit" class="btn btn-default">Add Contract Point</button>
             </form>        
-            <table id='id_list_table'> 
+            <table id='id_list_table' class='text-center'> 
                 {% for item in list.item_set.all %}
                 <tr><td>{{forloop.counter}}: {{ item.text }} </td></tr> 
                 {% endfor %}
             </table>
         </div>
     </div>
-
+    
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                <div class="btn-group" role="group">
+                    <a href="{%url 'view_company' company.user.id %}" ><button id="save_list_button" type="button" class="btn boton">Save and go to Profile</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 {# Assumes you setup the password_reset view in your URLconf #}

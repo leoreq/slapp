@@ -147,11 +147,25 @@ class NewCompanyTest(StaticLiveServerTestCase):
         self.fill_element_id('id_new_item','Eg .- Product Delivered on Time.','Deliver the testing suite in a timely manner')
         inputbox = self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys(Keys.ENTER)
-        import time
-        time.sleep(1)
+
         self.check_item_in_row('1: Deliver the testing suite in a timely manner')
 
-
+        #After adding a series of elements, the SAVE and GO BACK button redirects to the company profile page.
+        self.browser.find_element_by_id('save_list_button').click()
+        junaito_profile_url = self.browser.current_url
+        print(self.browser.current_url)
+        import time
+        time.sleep(3)
+        self.assertRegex(junaito_profile_url , '/slapp/company/.+')
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertIn('Manage your contracts in a fly', page_text)
+        self.assertNotIn('Add all the terms of your contract', page_text)
+       
+        
+        #The details of the service have been saved, and a new Update Service Button appears
+        #The update service button lets select the service contract and update its contents.
+        #Once selected the created list, juanito can see his previously saved list and add new items to it.
+        #He can also delete new items from it
         import time
         time.sleep(3)
 
