@@ -151,17 +151,17 @@ class ListViewTest(TestCase):
         new_company=Company.objects.create(user=self.test_user,name='New Testing Corp',service='This is a company that tests things')
 
     def test_page_urlresolve_to_listView_view(self):
-        list_=List.objects.create()
         new_company=Company.objects.get(name='New Testing Corp')
-        
+        list_=List.objects.create(company=new_company)
+
         found=resolve('/slapp/company/%d/service_contract/%d/'%(new_company.user.id,list_.id))
 
         self.assertEqual(found.func,view_list)
 
     def test_uses_a_list_template(self):
-        list_=List.objects.create()
         new_company=Company.objects.get(name='New Testing Corp')
-        
+        list_=List.objects.create(company=new_company)
+
         response=self.client.get('/slapp/company/%d/service_contract/%d/'%(new_company.user.id,list_.id))
         
         self.assertTemplateUsed(response,'sla_app/create_service_contract.html')
@@ -169,12 +169,12 @@ class ListViewTest(TestCase):
     def test_displays_all_list_items(self):
 
         new_company=Company.objects.get(name='New Testing Corp')
-        correct_list=List.objects.create()
+        correct_list=List.objects.create(company=new_company)
         
         Item.objects.create(text='itemey 1',list=correct_list)
         Item.objects.create(text='itemey 2',list=correct_list)
 
-        wrong_list=List.objects.create()
+        wrong_list=List.objects.create(company=new_company)
         Item.objects.create(text='itemeymal 1',list=wrong_list)
         Item.objects.create(text='itemeymal 2',list=wrong_list)
 
@@ -195,7 +195,7 @@ class NewListTest(TestCase):
 
     def test_save_a_POST_request(self):
         new_company=Company.objects.get(name='New Testing Corp')
-        list_=List.objects.create()
+        list_=List.objects.create(company=new_company)
 
         self.client.post('/slapp/company/%d/service_contract/%d/add_item'%(new_company.user.id,list_.id), data={'item_text':'A new list item'})
 
@@ -205,8 +205,8 @@ class NewListTest(TestCase):
 
     def test_can_save_a_POST_request_to_an_existing_list(self):
         new_company=Company.objects.get(name='New Testing Corp')
-        other_list=List.objects.create()
-        correct_list=List.objects.create()
+        other_list=List.objects.create(company=new_company)
+        correct_list=List.objects.create(company=new_company)
 
         response=self.client.post('/slapp/company/%d/service_contract/%d/add_item'%(new_company.user.id,correct_list.id), 
             data={'item_text':'A new item for an existing list'})
@@ -218,8 +218,8 @@ class NewListTest(TestCase):
 
     def test_redirect_to_list_view(self):
         new_company=Company.objects.get(name='New Testing Corp')
-        other_list=List.objects.create()
-        correct_list=List.objects.create()
+        other_list=List.objects.create(company=new_company)
+        correct_list=List.objects.create(company=new_company)
 
         response=self.client.post('/slapp/company/%d/service_contract/%d/add_item'%(new_company.user.id,correct_list.id), 
             data={'item_text':'A new item for an existing list'})
@@ -228,8 +228,8 @@ class NewListTest(TestCase):
 
     def test_passes_correct_list_to_template(self):
         new_company=Company.objects.get(name='New Testing Corp')
-        other_list=List.objects.create()
-        correct_list=List.objects.create()
+        other_list=List.objects.create(company=new_company)
+        correct_list=List.objects.create(company=new_company)
 
         response=self.client.get('/slapp/company/%d/service_contract/%d/'%(new_company.user.id,correct_list.id))
 

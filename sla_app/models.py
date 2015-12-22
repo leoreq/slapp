@@ -5,12 +5,6 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
-class List(models.Model):
-	pass
-class Item(models.Model):
-    text=models.TextField(default='')
-    list=models.ForeignKey(List,default=None)
-    status=models.BooleanField(default=False)
 
 
 class Company(models.Model):
@@ -24,6 +18,14 @@ class Company(models.Model):
 
 	class Meta:
 		ordering = ('service','name',)
+
+class List(models.Model):
+	company = models.ForeignKey(Company)
+
+class Item(models.Model):
+    text=models.TextField(default='')
+    list=models.ForeignKey(List,default=None)
+    status=models.BooleanField(default=False)
 
 class Provider(models.Model):
 	name=models.CharField(max_length=30,unique=True)

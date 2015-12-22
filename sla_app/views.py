@@ -49,8 +49,9 @@ def get_all_logged_in_users():
 
 
 def view_list(request,user_id,list_id):
-    list_=List.objects.get(id=list_id)
     active_company=Company.objects.get(user__id=user_id)
+    list_=List.objects.get(id=list_id,company=active_company)
+
     return render(request,'sla_app/create_service_contract.html', {'list':list_,'company':active_company} )
 
 def new_list(request,user_id):
@@ -62,7 +63,7 @@ def new_list(request,user_id):
 
 def add_item(request,user_id,list_id):
     active_company=Company.objects.get(user__id=user_id)
-    list_=List.objects.get(id=list_id)
+    list_=List.objects.get(id=list_id,company=active_company)
     
     Item.objects.create(text=request.POST['item_text'],list=list_)
 
@@ -70,7 +71,7 @@ def add_item(request,user_id,list_id):
 
 def create_service_contract(request,user_id):
     active_company=Company.objects.get(user__id=user_id)
-    list_=List.objects.create()
+    list_=List.objects.create(company=active_company)
     return render(request,'sla_app/create_service_contract.html',{'list':list_,'company':active_company})
 
 def pag_inicio(request):
