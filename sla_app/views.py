@@ -71,7 +71,9 @@ def add_item(request,user_id,list_id):
 
 def create_service_contract(request,user_id):
     active_company=Company.objects.get(user__id=user_id)
-    list_=List.objects.create(company=active_company)
+    try:list_=List.objects.get(id=1,company=active_company)
+
+    except:list_=List.objects.create(company=active_company)
     return render(request,'sla_app/create_service_contract.html',{'list':list_,'company':active_company})
 
 def pag_inicio(request):

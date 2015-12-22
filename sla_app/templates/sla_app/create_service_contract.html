@@ -40,10 +40,24 @@
                     <input type="text" class="form-control" name="item_text" id="id_new_item"  placeholder="Eg .- Product Delivered on Time.">
                 </div>
                 <button type="submit" class="btn btn-default">Add Contract Point</button>
-            </form>        
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-offset-2 col-xs-8">        
             <table id='id_list_table' class='text-center'> 
                 {% for item in list.item_set.all %}
-                <tr><td>{{forloop.counter}}: {{ item.text }} </td></tr> 
+                <tr class='text-center'><td class='text-center center-block'>
+                  <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                        <div class="btn-group" role="group">
+                            <button id="{{forloop.counter}}_contract_point_id" type="button" class="btn boton text-center">
+                            {{forloop.counter}}: {{ item.text }}</button>
+                        </div>
+                        <div class="btn-group" role="group">
+                            <button id="{{forloop.counter}}_contract_point_id_delete" type="button" class="btn  boton text-center"><span class="glyphicon glyphicon-remove"></span></button>
+                        </div>
+                    </div>
+                </td></tr> 
                 {% endfor %}
             </table>
         </div>
