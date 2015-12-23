@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect,resolve_url
+from django.shortcuts import render,redirect,resolve_url,get_object_or_404
 from django.http import HttpResponse
 
 from django.template import RequestContext, loader
@@ -69,11 +69,20 @@ def add_item(request,user_id,list_id):
 
     return redirect('/slapp/company/%d/service_contract/%d/'%(active_company.user.id,list_.id)) 
 
+#pending to be completed
+def delete_item(request,user_id,list_id,item_id):
+    active_company=Company.objects.get(user__id=user_id)
+    list_=List.objects.get(id=list_id,company=active_company)
+    item = get_object_or_404(Item, pk=item_id).delete()
+    
+    return redirect('/slapp/company/%d/service_contract/%d/'%(active_company.user.id,list_.id)) 
+
 def create_service_contract(request,user_id):
     active_company=Company.objects.get(user__id=user_id)
     try:list_=List.objects.get(id=1,company=active_company)
 
     except:list_=List.objects.create(company=active_company)
+    #print('{!r}'.format(active_company.user.id))
     return render(request,'sla_app/create_service_contract.html',{'list':list_,'company':active_company})
 
 def pag_inicio(request):
@@ -143,9 +152,12 @@ def profile_update(request):
 
         return redirect('/slapp/company/%d/'%company.user.id)
     
-
-    new_company_name="Enter Company Name"
-    new_service_name="Enter detail of service ofered"
+    try:
+        company = request.user.company
+        return redirect('/slapp/company/%d/'%company.user.id)
+    except ObjectDoesNotExist:
+        new_company_name="Enter Company Name"
+        new_service_name="Enter detail of service ofered"
 
     return render(request,
                   'sla_app/profile_update.html',

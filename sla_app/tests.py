@@ -1,7 +1,7 @@
 from django.test import TestCase,Client
 #Core resolvers are the ones that will process the User URL request.
 from django.core.urlresolvers import resolve
-from sla_app.views import home,pag_inicio,profile_update,create_service_contract,view_list
+from sla_app.views import home,pag_inicio,profile_update,create_service_contract,view_list,delete_item
 from django.http import HttpRequest
 from django.template.loader import render_to_string
 from sla_app.models import Company, List, Item
@@ -234,4 +234,78 @@ class NewListTest(TestCase):
         response=self.client.get('/slapp/company/%d/service_contract/%d/'%(new_company.user.id,correct_list.id))
 
         self.assertEqual(response.context['list'],correct_list)
+
+    def test_delete_item_from_list(self):
+        new_company=Company.objects.get(name='New Testing Corp')
+        correct_list=List.objects.create(company=new_company)
+        
+        Item.objects.create(text='itemey 1',list=correct_list)
+        Item.objects.create(text='itemey 2',list=correct_list)
+        Item.objects.create(text='itemey 3',list=correct_list)
+
+        obj_count=Item.objects.filter(list=correct_list).count()
+        self.assertEqual(obj_count,3)
+
+        Item.objects.get(text='itemey 3',list=correct_list).delete()
+        obj_count=Item.objects.filter(list=correct_list).count()
+   
+        self.assertEqual(obj_count,2)
+
+    def test_delete_item_from_correct_list(self):
+        new_company=Company.objects.get(name='New Testing Corp')
+        correct_list=List.objects.create(company=new_company)
+        
+        Item.objects.create(text='itemey 1',list=correct_list)
+        Item.objects.create(text='itemey 2',list=correct_list)
+        Item.objects.create(text='itemey 3',list=correct_list)
+
+        obj_count=Item.objects.filter(list=correct_list).count()
+        self.assertEqual(obj_count,3)
+
+        wrong_company=Company.objects.get(name='New Testing Corp')
+        wrong_list=List.objects.create(company=wrong_company)
+        
+        Item.objects.create(text='itemey 1',list=wrong_list)
+        Item.objects.create(text='itemey 2',list=wrong_list)
+        Item.objects.create(text='itemey 3',list=wrong_list)
+
+        obj_count=Item.objects.filter(list=wrong_list).count()
+        self.assertEqual(obj_count,3)
+
+        Item.objects.get(text='itemey 3',list=correct_list).delete()
+
+        obj_count=Item.objects.filter(list=wrong_list).count()
+   
+        self.assertEqual(obj_count,3)
+
+        obj_count=Item.objects.filter(list=correct_list).count()
+   
+        self.assertEqual(obj_count,2)
+
+    def test_page_urlresolve_to_delete_item_view(self):
+        new_company=Company.objects.get(name='New Testing Corp')
+        list_=List.objects.create(company=new_company)
+        item1=Item.objects.create(text='itemey 1',list=list_)
+
+        found=resolve('/slapp/company/%d/service_contract/%d/delete/%d/'%(new_company.user.id,list_.id,item1.id))
+
+        self.assertEqual(found.func,delete_item)
+
+    def test_delete_item_from_delete_url(self):
+        new_company=Company.objects.get(name='New Testing Corp')
+        correct_list=List.objects.create(company=new_company)
+        
+        item1=Item.objects.create(text='itemey 1',list=correct_list)
+        item2=Item.objects.create(text='itemey 2',list=correct_list)
+        item3=Item.objects.create(text='itemey 3',list=correct_list)
+
+        obj_count=Item.objects.filter(list=correct_list).count()
+        self.assertEqual(obj_count,3)
+
+        response=self.client.delete('/slapp/company/%d/service_contract/%d/delete/%d/'%(new_company.user.id,correct_list.id,item2.id))
+
+        obj_count=Item.objects.filter(list=correct_list).count()
+   
+        self.assertEqual(obj_count,2)
+
 

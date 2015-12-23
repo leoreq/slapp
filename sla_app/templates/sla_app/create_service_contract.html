@@ -54,7 +54,7 @@
                             {{forloop.counter}}: {{ item.text }}</button>
                         </div>
                         <div class="btn-group" role="group">
-                            <button id="{{forloop.counter}}_contract_point_id_delete" type="button" class="btn  boton text-center"><span class="glyphicon glyphicon-remove"></span></button>
+                            <a href="{%url 'slapp_delete_item' company.user.id list.id item.id %}" ><button id="{{forloop.counter}}_contract_point_id_delete" type="button" class="btn  boton text-center"><span class="glyphicon glyphicon-remove"></span></button></a>
                         </div>
                     </div>
                 </td></tr> 
