@@ -1,0 +1,1 @@
+web: gunicorn slapp.wsgi --log-file -
