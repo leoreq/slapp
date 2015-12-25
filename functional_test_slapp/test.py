@@ -33,8 +33,12 @@ class NewCompanyTest(StaticLiveServerTestCase):
     def check_item_in_row(self,item_name):
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        print('{!r}'.format(rows))
         self.assertIn(item_name,[row.text for row in rows])
+
+    def check_item_not_in_row(self,item_name):
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertNotIn(item_name,[row.text for row in rows])
 
     def test_new_company_login(self):
 
@@ -151,24 +155,42 @@ class NewCompanyTest(StaticLiveServerTestCase):
         self.fill_element_id('id_new_item','Eg .- Product Delivered on Time.','Test , test and keep testing')
         inputbox = self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys(Keys.ENTER)
+        self.fill_element_id('id_new_item','Eg .- Product Delivered on Time.','Conduct intensive testing suite')
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys(Keys.ENTER)
+
         self.check_item_in_row('1: Deliver the testing suite in a timely manner')
+        self.check_item_in_row('2: Test , test and keep testing')
+        self.check_item_in_row('3: Conduct intensive testing suite')
 
         #After adding a series of elements, the SAVE and GO BACK button redirects to the company profile page.
         self.browser.find_element_by_id('save_list_button').click()
         junaito_profile_url = self.browser.current_url
-        
-        print(self.browser.current_url)
-        import time
-        time.sleep(3)
 
         self.assertRegex(junaito_profile_url , '/slapp/company/.+')
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertIn('Manage your contracts in a fly', page_text)
         self.assertNotIn('Add all the terms of your contract', page_text)
        
-        #The details of the service have been saved, and a new Update Service Button appears
-        #The update service button lets select the service contract and update its contents.
+        #The details of the service have been saved, and a new Update Service Button appears. ***PENDING FOR Second Release
+        #If you go back to the create service button You can see that the items that were previously saved are there.
+        button = self.browser.find_element_by_id('create_service_contract_button').click()
+        ##Assuming that the session is logged in, URL: SLAPP/COMPANY/company_id/services/service_id
+        junaito_profile_url = self.browser.current_url
+        self.assertRegex(junaito_profile_url , '/slapp/company/.+/service_contract/')
+        page_text = self.browser.find_element_by_tag_name('body').text
         
+        self.check_item_in_row('1: Deliver the testing suite in a timely manner')
+        self.check_item_in_row('2: Test , test and keep testing')
+        self.check_item_in_row('3: Conduct intensive testing suite')
+
+        #You can delete an element by selecting the "x" span. 
+        button = self.browser.find_element_by_id('2_contract_point_id_delete').click()
+
+        self.check_item_in_row('1: Deliver the testing suite in a timely manner')
+        self.check_item_not_in_row('2: Test , test and keep testing')
+        self.check_item_in_row('2: Conduct intensive testing suite')
+
         #Once selected the created list, juanito can see his previously saved list and add new items to it.
         #He can also delete new items from it
         import time
