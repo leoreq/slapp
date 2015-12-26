@@ -79,7 +79,9 @@ def delete_item(request,user_id,list_id,item_id):
 
 def create_service_contract(request,user_id):
     active_company=Company.objects.get(user__id=user_id)
-    try:list_=List.objects.get(id=1,company=active_company)
+    try:
+        #list_=List.objects.get(id=1,company=active_company)
+        list_=List.objects.filter(company=active_company).order_by('pk')[0]
 
     except:list_=List.objects.create(company=active_company)
     #print('{!r}'.format(active_company.user.id))
