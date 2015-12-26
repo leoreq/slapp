@@ -67,3 +67,7 @@ docs/_build/
 [Ss]cripts
 
 
+#HEROKU EXTRA
+staticfiles
+
+
